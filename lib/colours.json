@@ -1,0 +1,55 @@
+{
+  "medium blue": {
+    "tailwindBg": "bg-blue-500 border-blue-400",
+    "label": "Blue"
+  },
+  "red": { "tailwindBg": "bg-red-500 border-red-400", "label": "Red" },
+  "light green": {
+    "tailwindBg": "bg-green-300 border-green-200",
+    "label": "Lime"
+  },
+  "light pink": {
+    "tailwindBg": "bg-pink-300 border-pink-200",
+    "label": "Pink"
+  },
+  "whites/cream": {
+    "tailwindBg": "bg-stone-50 border-stone-100",
+    "label": "White"
+  },
+  "light blue": { "tailwindBg": "bg-blue-300 border-blue-200", "label": "Sky" },
+  "bright red/pink": {
+    "tailwindBg": "bg-red-300 border-red-200",
+    "label": "Light Red"
+  },
+  "medium green": {
+    "tailwindBg": "bg-green-500 border-green-400",
+    "label": "Green"
+  },
+  "dark green": {
+    "tailwindBg": "bg-green-700 border-green-600",
+    "label": "Emerald"
+  },
+  "tans/beige": {
+    "tailwindBg": "bg-stone-300 border-stone-200",
+    "label": "Tan"
+  },
+  "dark blue": { "tailwindBg": "bg-blue-700 border-blue-600", "label": "Navy" },
+  "orange": {
+    "tailwindBg": "bg-orange-500 border-orange-400",
+    "label": "Orange"
+  },
+  "darks/black": {
+    "tailwindBg": "bg-zinc-900 border-zinc-800",
+    "label": "Black"
+  },
+  "purple": {
+    "tailwindBg": "bg-purple-500 border-purple-400",
+    "label": "Purple"
+  },
+  "gray": { "tailwindBg": "bg-zinc-500 border-zinc-400", "label": "Grey" },
+  "yellow": {
+    "tailwindBg": "bg-yellow-500 border-yellow-400",
+    "label": "Yellow"
+  },
+  "brown": { "tailwindBg": "bg-stone-700 border-stone-600", "label": "Brown" }
+}

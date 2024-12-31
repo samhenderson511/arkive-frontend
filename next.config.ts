@@ -1,12 +1,8 @@
 export default {
   images: {
-    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'cdn.shopify.com',
-        pathname: '/s/files/**'
-      }
-    ]
+      { hostname: "localhost" },
+      { hostname: "arkive-public.s3.eu-north-1.amazonaws.com" },
+    ],
   }
 };

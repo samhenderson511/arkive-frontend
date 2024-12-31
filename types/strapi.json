@@ -1,0 +1,336 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "attributes": {
+        "Title": "Menswear",
+        "CategoryHandle": "/MENSWEAR",
+        "FooterSeoText": "Dive into Arkive Clothing's curated men's fashion selections. From brands like Adidas, Carhartt WIP, and Butter Goods, we bring you the finest in apparel and footwear. \n\nUpgrade your wardrobe with our diverse collection, from jackets to joggers and beyond. With fast shipping and a quality guarantee, Arkive Clothing ensures an effortless shopping experience.\n\nShop, express, and wear your style with Arkive Clothing.",
+        "createdAt": "2023-09-23T12:53:15.002Z",
+        "updatedAt": "2023-09-23T14:35:46.843Z",
+        "publishedAt": "2023-09-23T15:09:14.897Z",
+        "Logo": {
+          "data": {
+            "id": 9,
+            "attributes": {
+              "name": "Logo.svg",
+              "alternativeText": null,
+              "caption": null,
+              "width": 593,
+              "height": 82,
+              "formats": null,
+              "hash": "Logo_7a613981f4",
+              "ext": ".svg",
+              "mime": "image/svg+xml",
+              "size": 1.64,
+              "url": "https://storage.googleapis.com/arkive-public/Logo_7a613981f4/Logo_7a613981f4.svg",
+              "previewUrl": null,
+              "provider": "@strapi-community/strapi-provider-upload-google-cloud-storage",
+              "provider_metadata": null,
+              "createdAt": "2023-09-17T08:30:00.791Z",
+              "updatedAt": "2023-09-22T17:47:08.062Z"
+            }
+          }
+        },
+        "HeroBanner": {
+          "data": [
+            {
+              "id": 1,
+              "attributes": {
+                "createdAt": "2023-09-23T10:51:06.021Z",
+                "updatedAt": "2023-09-23T14:32:57.317Z",
+                "publishedAt": "2023-09-23T10:52:00.918Z"
+              }
+            },
+            {
+              "id": 4,
+              "attributes": {
+                "createdAt": "2023-09-23T10:55:17.737Z",
+                "updatedAt": "2023-09-23T14:33:45.923Z",
+                "publishedAt": "2023-09-23T10:59:39.976Z"
+              }
+            }
+          ]
+        },
+        "GridTile": {
+          "data": [
+            {
+              "id": 2,
+              "attributes": {
+                "Title": "Hoodies",
+                "createdAt": "2023-09-23T13:45:01.127Z",
+                "updatedAt": "2023-09-23T13:45:01.127Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/hoodies"
+              }
+            },
+            {
+              "id": 3,
+              "attributes": {
+                "Title": "Joggers",
+                "createdAt": "2023-09-23T13:45:46.975Z",
+                "updatedAt": "2023-09-23T13:45:46.975Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/joggers"
+              }
+            },
+            {
+              "id": 1,
+              "attributes": {
+                "Title": "Jeans",
+                "createdAt": "2023-09-23T13:43:50.165Z",
+                "updatedAt": "2023-09-23T13:43:50.165Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/jeans"
+              }
+            },
+            {
+              "id": 5,
+              "attributes": {
+                "Title": "New Arrivals",
+                "createdAt": "2023-09-23T12:52:32.107Z",
+                "updatedAt": "2023-09-23T12:52:32.107Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/menswear/new-arrivals"
+              }
+            },
+            {
+              "id": 4,
+              "attributes": {
+                "Title": "Sale",
+                "createdAt": "2023-09-23T12:51:46.263Z",
+                "updatedAt": "2023-09-23T12:51:46.263Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/menswear/sale"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 2,
+      "attributes": {
+        "Title": "Womenswear",
+        "CategoryHandle": "/WOMENSWEAR",
+        "FooterSeoText": "Dive into Arkive Clothing's curated men's fashion selections. From brands like Adidas, Carhartt WIP, and Butter Goods, we bring you the finest in apparel and footwear. \n\nUpgrade your wardrobe with our diverse collection, from jackets to joggers and beyond. With fast shipping and a quality guarantee, Arkive Clothing ensures an effortless shopping experience.\n\nShop, express, and wear your style with Arkive Clothing.",
+        "createdAt": "2023-09-23T14:37:16.698Z",
+        "updatedAt": "2023-09-23T14:37:16.698Z",
+        "publishedAt": "2023-09-23T15:09:14.897Z",
+        "Logo": {
+          "data": {
+            "id": 9,
+            "attributes": {
+              "name": "Logo.svg",
+              "alternativeText": null,
+              "caption": null,
+              "width": 593,
+              "height": 82,
+              "formats": null,
+              "hash": "Logo_7a613981f4",
+              "ext": ".svg",
+              "mime": "image/svg+xml",
+              "size": 1.64,
+              "url": "https://storage.googleapis.com/arkive-public/Logo_7a613981f4/Logo_7a613981f4.svg",
+              "previewUrl": null,
+              "provider": "@strapi-community/strapi-provider-upload-google-cloud-storage",
+              "provider_metadata": null,
+              "createdAt": "2023-09-17T08:30:00.791Z",
+              "updatedAt": "2023-09-22T17:47:08.062Z"
+            }
+          }
+        },
+        "HeroBanner": {
+          "data": [
+            {
+              "id": 4,
+              "attributes": {
+                "createdAt": "2023-09-23T10:55:17.737Z",
+                "updatedAt": "2023-09-23T14:33:45.923Z",
+                "publishedAt": "2023-09-23T10:59:39.976Z"
+              }
+            },
+            {
+              "id": 3,
+              "attributes": {
+                "createdAt": "2023-09-23T10:53:38.665Z",
+                "updatedAt": "2023-09-23T14:33:24.281Z",
+                "publishedAt": "2023-09-23T10:59:39.976Z"
+              }
+            }
+          ]
+        },
+        "GridTile": {
+          "data": [
+            {
+              "id": 2,
+              "attributes": {
+                "Title": "Hoodies",
+                "createdAt": "2023-09-23T13:45:01.127Z",
+                "updatedAt": "2023-09-23T13:45:01.127Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/hoodies"
+              }
+            },
+            {
+              "id": 3,
+              "attributes": {
+                "Title": "Joggers",
+                "createdAt": "2023-09-23T13:45:46.975Z",
+                "updatedAt": "2023-09-23T13:45:46.975Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/joggers"
+              }
+            },
+            {
+              "id": 1,
+              "attributes": {
+                "Title": "Jeans",
+                "createdAt": "2023-09-23T13:43:50.165Z",
+                "updatedAt": "2023-09-23T13:43:50.165Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/jeans"
+              }
+            },
+            {
+              "id": 5,
+              "attributes": {
+                "Title": "New Arrivals",
+                "createdAt": "2023-09-23T12:52:32.107Z",
+                "updatedAt": "2023-09-23T12:52:32.107Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/menswear/new-arrivals"
+              }
+            },
+            {
+              "id": 4,
+              "attributes": {
+                "Title": "Sale",
+                "createdAt": "2023-09-23T12:51:46.263Z",
+                "updatedAt": "2023-09-23T12:51:46.263Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/menswear/sale"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 3,
+      "attributes": {
+        "Title": "Ozzy's Skate",
+        "CategoryHandle": "/OZZYS",
+        "FooterSeoText": "Ride into Ozzy's handpicked skateboard gear collection. Featuring brands such as Vans, Element, and Santa Cruz, we offer you the best in skateboarding equipment and apparel. \n\nElevate your skate game with our vast range, from decks to bearings and everything in between. With swift delivery and a commitment to quality, Ozzy's Skateboard Store promises a smooth ride in every purchase..",
+        "createdAt": "2023-09-23T13:49:20.816Z",
+        "updatedAt": "2023-09-23T13:49:20.816Z",
+        "publishedAt": "2023-09-23T15:09:14.897Z",
+        "Logo": {
+          "data": {
+            "id": 32,
+            "attributes": {
+              "name": "Ozzys.svg",
+              "alternativeText": null,
+              "caption": null,
+              "width": 32,
+              "height": 32,
+              "formats": null,
+              "hash": "Ozzys_d641d692dc",
+              "ext": ".svg",
+              "mime": "image/svg+xml",
+              "size": 13.27,
+              "url": "https://storage.googleapis.com/arkive-public/Ozzys_d641d692dc/Ozzys_d641d692dc.svg",
+              "previewUrl": null,
+              "provider": "@strapi-community/strapi-provider-upload-google-cloud-storage",
+              "provider_metadata": null,
+              "createdAt": "2023-09-22T17:48:01.659Z",
+              "updatedAt": "2023-09-22T17:48:01.659Z"
+            }
+          }
+        },
+        "HeroBanner": {
+          "data": [
+            {
+              "id": 4,
+              "attributes": {
+                "createdAt": "2023-09-23T10:55:17.737Z",
+                "updatedAt": "2023-09-23T14:33:45.923Z",
+                "publishedAt": "2023-09-23T10:59:39.976Z"
+              }
+            },
+            {
+              "id": 1,
+              "attributes": {
+                "createdAt": "2023-09-23T10:51:06.021Z",
+                "updatedAt": "2023-09-23T14:32:57.317Z",
+                "publishedAt": "2023-09-23T10:52:00.918Z"
+              }
+            }
+          ]
+        },
+        "GridTile": {
+          "data": [
+            {
+              "id": 2,
+              "attributes": {
+                "Title": "Hoodies",
+                "createdAt": "2023-09-23T13:45:01.127Z",
+                "updatedAt": "2023-09-23T13:45:01.127Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/hoodies"
+              }
+            },
+            {
+              "id": 3,
+              "attributes": {
+                "Title": "Joggers",
+                "createdAt": "2023-09-23T13:45:46.975Z",
+                "updatedAt": "2023-09-23T13:45:46.975Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/joggers"
+              }
+            },
+            {
+              "id": 1,
+              "attributes": {
+                "Title": "Jeans",
+                "createdAt": "2023-09-23T13:43:50.165Z",
+                "updatedAt": "2023-09-23T13:43:50.165Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/meanswear/jeans"
+              }
+            },
+            {
+              "id": 5,
+              "attributes": {
+                "Title": "New Arrivals",
+                "createdAt": "2023-09-23T12:52:32.107Z",
+                "updatedAt": "2023-09-23T12:52:32.107Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/menswear/new-arrivals"
+              }
+            },
+            {
+              "id": 4,
+              "attributes": {
+                "Title": "Sale",
+                "createdAt": "2023-09-23T12:51:46.263Z",
+                "updatedAt": "2023-09-23T12:51:46.263Z",
+                "publishedAt": "2023-09-23T13:59:06.524Z",
+                "Link": "/menswear/sale"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "pageSize": 25,
+      "pageCount": 1,
+      "total": 3
+    }
+  }
+}
