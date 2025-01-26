@@ -1,5 +1,5 @@
 import { cartUpdate } from "@/components/checkout/actions";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/common";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui";
 import compareAddresses from "@/lib/util/compare-addresses";
 import type { Address, AddressPayload, Cart } from "@medusajs/client-types";
 import { omit } from "lodash";

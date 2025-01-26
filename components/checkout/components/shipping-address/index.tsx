@@ -1,4 +1,4 @@
-import { Checkbox, Input, Label } from "@/components/common";
+import { Checkbox, Input, Label } from "@/components/ui";
 import type { Cart, Customer } from "@medusajs/client-types";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import AddressSelect from "../address-select";

@@ -7,7 +7,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/common";
+} from "@/components/ui";
 import { updateCustomerBillingAddress } from "@/lib/data";
 import type { Customer, Region } from "@medusajs/client-types";
 import React, { useEffect, useMemo } from "react";

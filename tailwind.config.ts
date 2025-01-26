@@ -1,18 +1,21 @@
-import { Config } from "tailwindcss/types/config"
-import { constructClass, groupPeerPlugin } from "./plugins"
+import { Config } from "tailwindcss/types/config";
+import { constructClass, groupPeerPlugin } from "./plugins";
 
 const config: Config = {
   content: [
-    "./src/app/**/*.{js,ts,jsx,tsx,json}",
-    "./src/pages/**/*.{js,ts,jsx,tsx,json}",
-    "./src/components/**/*.{js,ts,jsx,tsx,json}",
-    "./src/modules/**/*.{js,ts,jsx,tsx,json}",
+    "./app/**/*.{ts,tsx,json,css}",
+    "./components/**/*.{ts,tsx,json,css}",
+    "./lib/**/*.{ts,tsx,json,css}",
   ],
   darkMode: "class",
   theme: {
     extend: {
       screens: {
         xs: "384px",
+      },
+      fontWeight: {
+        headingWeight: "var(--heading-font-weight)",
+        bodyWeight: "var(--body-font-weight)",
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -106,9 +109,9 @@ const config: Config = {
         ring: constructClass("ring"),
       },
       borderRadius: {
-        sm: `var(--radius)`,
-        md: `calc(var(--radius) + 2px)`,
-        lg: "calc(var(--radius) + 4px)",
+        sm: `calc(var(--radius) * 0.5)`,
+        md: `var(--radius)`,
+        lg: `calc(var(--radius) * 1.5)`,
       },
       transitionProperty: {
         width: "width",
@@ -144,6 +147,6 @@ const config: Config = {
     require("tailwindcss-aspect-ratio"),
     groupPeerPlugin(),
   ],
-}
+};
 
-export default config
+export default config;

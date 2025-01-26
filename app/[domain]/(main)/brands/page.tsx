@@ -1,5 +1,5 @@
-import { Logo, TitleBar } from "@/components/common";
 import { Tile } from "@/components/common/tile";
+import { Logo, TitleBar } from "@/components/ui";
 import { getCategoryBrands } from "@/lib/data/getCategoryBrands";
 import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
 import { getRegion } from "@/lib/data/getRegion";
@@ -32,7 +32,7 @@ async function Brands(props: StoreTabPageProps) {
         logo={tab.Logo.data}
       />
       <div className={"px-1.5 lg:px-8 w-full flex justify-center"}>
-        <div className={"grid grid-cols-1 lg:grid-cols-2 gap-1.5 lg:gap-3 max-w-8xl w-full"}>
+        <div className={"grid grid-cols-1 lg:grid-cols-2 gap-1.5 lg:gap-3 max-w-screen-2xl w-full"}>
           {brands
             .sort((a, b) =>
               a.attributes.BrandBanner.Title.localeCompare(b.attributes.BrandBanner.Title)

@@ -1,6 +1,8 @@
 "use client";
 
+import { Logo } from "@/components";
 import { wrap } from "@motionone/utils";
+import clsx from "clsx";
 import {
   motion,
   useAnimationFrame,
@@ -15,7 +17,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ComponentProps, useRef } from "react";
 import slugify from "slugify";
-import { Logo } from "../../common/logo";
 
 type ClientBrand = {
   name: string;
@@ -25,9 +26,10 @@ type ClientBrand = {
 interface Props {
   brands: ClientBrand[];
   scrollSpeed: number;
+  className?: string;
 }
 
-export function BrandsClient({ brands, scrollSpeed }: Props) {
+export function BrandsClient({ brands, scrollSpeed, className }: Props) {
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -42,21 +44,24 @@ export function BrandsClient({ brands, scrollSpeed }: Props) {
 
   const directionFactor = useRef<number>(1);
   useAnimationFrame((t, delta) => {
-    let moveBy = directionFactor.current * 0.5 * (delta / 1000);
+    let moveBy = directionFactor.current * (scrollSpeed || 3) * (delta / 1000);
     directionFactor.current = velocityFactor.get() < 0 ? -0.75 : 0.75;
     moveBy += directionFactor.current * moveBy * velocityFactor.get();
     baseX.set(baseX.get() + moveBy);
   });
 
   return (
-    <div className="w-full overflow-hidden">
+    <div className={clsx("w-full overflow-hidden", className)}>
       <div className="parallax">
         <motion.div className="flex gap-16 w-max scroller" style={{ x }}>
           {Array(4).fill(
             brands.map((brand) => (
-              <div className="flex gap-16 flex-nowrap">
-                <Link href={toLower(`/brands/${slugify(brand.name, { lower: true })}`)}>
-                  <Logo className={"opacity-50 dark:invert"} logo={brand.logo} />
+              <div key={brand.name} className="flex gap-16 flex-nowrap">
+                <Link
+                  title={brand.name}
+                  href={toLower(`/brands/${slugify(brand.name, { lower: true })}`)}
+                >
+                  <Logo className={"brightness-50"} logo={brand.logo} />
                 </Link>
               </div>
             ))

@@ -1,6 +1,8 @@
-import { getSite } from "@/lib/data/getSite";
+import { Theme } from "@/components/layout/theme";
+import { getSite } from "@/lib/data/get-site";
 import { strapiQuery } from "@/lib/strapi-query";
 import { ApiSite } from "@/types";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
   const domains = await strapiQuery<ApiSite[]>({
@@ -14,7 +16,7 @@ export async function generateStaticParams() {
     },
   });
 
-  const params = domains.data?.map(({ category }) => ({
+  const params = domains?.data?.map(({ category }) => ({
     domain: encodeURIComponent(category.name).toLowerCase(),
   }));
 
@@ -28,14 +30,12 @@ export async function generateMetadata({ params }: { params: Promise<{ domain: s
     populate: { seo: true, logo: true, favicon: true, appleTouchIcon: true },
   });
 
-  if (!site) {
-    return {};
-  }
+  if (!site) return {};
 
   const { description, images, keywords, title } = site.seo;
 
   return {
-    title: { template: `%s | ${title}`, absolute: title },
+    title: { template: `%s | ${title}`, absolute: title || "" },
     description: description,
     keywords: keywords,
     openGraph: {
@@ -81,7 +81,7 @@ export default async function DomainLayout({
 
   const site = await getSite(domain);
 
-  console.log(domain, site);
+  if (!site) return notFound();
 
-  // return <>{children}</>;
+  return <Theme site={site}>{children}</Theme>;
 }

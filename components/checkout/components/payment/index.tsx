@@ -3,8 +3,8 @@
 import { setPaymentMethod } from "@/components/checkout/actions";
 import PaymentContainer from "@/components/checkout/components/payment-container";
 import { StripeContext } from "@/components/checkout/components/payment-wrapper";
-import { Button, Label, RadioGroup } from "@/components/common";
-import { Alert, AlertTitle } from "@/components/common/alert";
+import { Button, Label, RadioGroup } from "@/components/ui";
+import { Alert, AlertTitle } from "@/components/ui/alert/index";
 import { paymentInfoMap } from "@/lib/constants";
 import type { Cart } from "@medusajs/client-types";
 import { CardElement } from "@stripe/react-stripe-js";

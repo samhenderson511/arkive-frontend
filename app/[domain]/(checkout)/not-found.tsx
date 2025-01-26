@@ -1,5 +1,5 @@
-import { Button } from "@/components/common";
-import { ErrorLayout } from "@/components/layout/templates/error";
+import { ErrorLayout } from "@/components/layout/error";
+import { Button } from "@/components/ui";
 import { IconUnlink } from "@tabler/icons-react";
 import { Metadata } from "next";
 

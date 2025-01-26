@@ -1,6 +1,6 @@
 import DiscountCode from "@/components/checkout/components/discount-code";
-import { CartTotals } from "@/components/common";
 import Items from "@/components/order/components/items";
+import { CartTotals } from "@/components/ui";
 import { getCart } from "@/lib/medusaClient/getCart";
 import { barlow } from "app/fonts";
 import clsx from "clsx";

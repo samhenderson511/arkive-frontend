@@ -1,4 +1,4 @@
-import { Button } from "@/components/common";
+import { Button } from "@/components/ui";
 import { strapiFetch } from "@/lib/api";
 import { barlow } from "app/fonts";
 import clsx from "clsx";

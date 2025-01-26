@@ -1,5 +1,5 @@
-import { BlocksContent } from "@strapi/blocks-react-renderer";
-import { ApiBrand, ApiCategory, ApiColour } from "./apis";
+import type { BlocksContent } from "@strapi/blocks-react-renderer";
+import { ApiBrand, ApiCategory, ApiColour, ApiProductVariant } from "./apis";
 import { Media } from "./built-ins";
 
 export interface RepeatableGridTile {
@@ -50,12 +50,30 @@ export interface RepeatableColourImage {
 }
 
 export interface SingleSeo {
-  description: string;
-  images: Media;
-  keywords: string;
-  noIndex: boolean;
-  schema: JSON;
-  title: string;
+  description?: string;
+  images?: Media;
+  keywords?: string;
+  noIndex?: boolean;
+  schema?: JSON;
+  title?: string;
+}
+
+export interface RepeatableLineItem {
+  productVariant: ApiProductVariant;
+  quantity: number;
+  total: number;
+}
+
+export interface RepeatableAddress {
+  city: string;
+  company: string;
+  country: string;
+  firstName: string;
+  lastName: string;
+  postalCode: string;
+  stateRegion: string;
+  streetAddress: string;
+  uid: string;
 }
 
 export interface UiCard {
@@ -63,6 +81,13 @@ export interface UiCard {
   images: Media[];
   buttons?: UiButton[];
   design?: SingleDesign;
+}
+
+export interface RepeatableShipment {
+  createShippingLabel: boolean;
+  lineItems: RepeatableLineItem[];
+  trackingNumber: string;
+  trackingUrl: string;
 }
 
 export interface RepeatableGridTile {

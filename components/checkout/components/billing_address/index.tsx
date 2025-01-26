@@ -1,4 +1,4 @@
-import { Input } from "@/components/common";
+import { Input } from "@/components/ui";
 import type { Cart } from "@medusajs/client-types";
 import { useEffect, useState } from "react";
 import CountrySelect from "../country-select";

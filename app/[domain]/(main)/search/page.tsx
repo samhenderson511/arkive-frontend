@@ -1,4 +1,4 @@
-import { FilteredProductLayout } from "@/components/common";
+import { FilteredProductLayout } from "@/components/ui";
 import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
 import { getRegion } from "@/lib/data/getRegion";
 import { notFound } from "next/navigation";

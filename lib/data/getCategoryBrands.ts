@@ -4,7 +4,7 @@ import { strapiFetch } from "@/lib/api";
 import { initialize as initializeProductModule } from "@medusajs/product";
 import { unstable_cache } from "next/cache";
 import { BannerBrand } from "types/strapi";
-import { toTitleCase } from "../util/toTitleCase";
+import { toTitleCase } from "../util/to-title-case";
 
 export async function getCategoryBrands(categoryHandle: string) {
   const getCategoryBrandsCache = unstable_cache(

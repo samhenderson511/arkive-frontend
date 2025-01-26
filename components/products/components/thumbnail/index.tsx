@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/util";
+import { cn } from "@/lib";
 import { IconShirt } from "@tabler/icons-react";
 import Image from "next/image";
 import { ComponentProps, ComponentPropsWithRef, forwardRef } from "react";

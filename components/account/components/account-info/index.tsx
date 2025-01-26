@@ -1,7 +1,7 @@
-import { Button } from "@/components/common";
-import { Alert } from "@/components/common/alert";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Button } from "@/components/ui";
+import { Alert } from "@/components/ui/alert/index";
 import useToggleState from "@/lib/hooks/use-toggle-state";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { IconLoader2 } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useFormStatus } from "react-dom";

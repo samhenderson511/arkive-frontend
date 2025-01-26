@@ -1,7 +1,7 @@
 import { UiButton } from "../../types/strapi/components";
-import { Button, ButtonProps } from "../common";
+import { Button, ButtonProps } from "../ui/button";
 
-export async function ButtonBlock(data: UiButton) {
+export async function ButtonBlock({ className, ...data }: UiButton & { className?: string }) {
   const sizeMap: Record<UiButton["size"], ButtonProps["size"]> = {
     Small: "sm",
     Default: "default",
@@ -17,7 +17,12 @@ export async function ButtonBlock(data: UiButton) {
   };
 
   return (
-    <Button href={data.href} size={sizeMap[data.size]} variant={variantMap[data.variant]}>
+    <Button
+      className={className}
+      href={data.href}
+      size={sizeMap[data.size]}
+      variant={variantMap[data.variant]}
+    >
       {data.children}
     </Button>
   );

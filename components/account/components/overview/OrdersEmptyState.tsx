@@ -1,4 +1,4 @@
-import { Button } from "@/components/common";
+import { Button } from "@/components/ui";
 import { barlow } from "app/fonts";
 import clsx from "clsx";
 import Image from "next/image";

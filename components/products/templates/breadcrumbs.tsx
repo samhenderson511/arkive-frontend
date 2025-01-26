@@ -1,4 +1,4 @@
-import { Button } from "@/components/common";
+import { Button } from "@/components/ui";
 import { handleWithoutCategory } from "@/lib/util/handleWithoutCategory";
 import clsx from "clsx";
 import { Fragment } from "react";

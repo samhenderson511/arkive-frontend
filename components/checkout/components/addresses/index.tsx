@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/common";
+import { Button } from "@/components/ui";
 import compareAddresses from "@/lib/util/compare-addresses";
 import type { Cart, Customer } from "@medusajs/client-types";
 import { IconCircleCheckFilled, IconLoader2 } from "@tabler/icons-react";

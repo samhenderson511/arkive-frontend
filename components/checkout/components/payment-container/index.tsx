@@ -1,4 +1,4 @@
-import { Label, RadioGroupItem } from "@/components/common";
+import { Label, RadioGroupItem } from "@/components/ui";
 import type { PaymentSession } from "@medusajs/client-types";
 import { clsx } from "clsx";
 import React, { FC } from "react";

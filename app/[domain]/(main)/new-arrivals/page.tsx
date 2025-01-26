@@ -1,35 +1,30 @@
-import { FilteredProductLayout } from "@/components/common";
-import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
-import { getCategoryProducts } from "@/lib/data/getCategoryProducts";
-import { getRegion } from "@/lib/data/getRegion";
-import { notFound } from "next/navigation";
-import { StoreTabPageProps } from "types/global";
+import { SearchContext } from "@/components";
+import { BannerBlock } from "@/components/block-render/banner-block";
+import { Transition } from "@/components/layout/transition";
+import { DefaultResults } from "@/components/search/default-results";
+import { getSite } from "@/lib/server";
 
-export { generateMetadata } from "./metadata";
+export default async function NewArrivals({ params }: { params: Promise<{ domain: string }> }) {
+  const { domain } = await params;
 
-async function NewArrivals(props: StoreTabPageProps) {
-  const params = await props.params;
-  const { tab, handle } = await getCategoryFromDomain(params.domain, 4);
-  const page = tab.NewArrivalsPageBanner;
-  const region = await getRegion(params.countryCode);
-
-  if (!page) return notFound();
-
-  const products = await getCategoryProducts({
-    categoryHandle: handle,
-    region,
-    limit: 100,
+  const site = await getSite(decodeURIComponent(domain), {
+    populate: { newArrivalsBanner: { populate: { background: true } }, category: true },
   });
 
   return (
-    <FilteredProductLayout
-      page={page}
-      category={tab}
-      region={region}
-      products={products}
-      filterData={products}
-    />
+    <>
+      <Transition transitionName="fadeInUp">
+        <BannerBlock {...site.newArrivalsBanner} className="h-72 lg:h-80 [&>div]:lg:pb-8 " />
+      </Transition>
+
+      <SearchContext
+        indexName={"arkive:products"}
+        configure={{ hitsPerPage: 36, filters: `categories.cat:=:${site.category.name}` }}
+      >
+        <Transition waitForInView transitionName="fadeInUp">
+          <DefaultResults rootPath={site.category.name} />
+        </Transition>
+      </SearchContext>
+    </>
   );
 }
-
-export default NewArrivals;

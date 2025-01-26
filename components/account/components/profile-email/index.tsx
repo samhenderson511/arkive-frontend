@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@/components/common";
+import { Input } from "@/components/ui";
 import { updateCustomerEmail } from "@/lib/data";
 import type { Customer } from "@medusajs/client-types";
 import React, { useEffect } from "react";

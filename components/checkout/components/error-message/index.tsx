@@ -1,4 +1,4 @@
-import { Alert, AlertTitle } from "@/components/common/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert/index";
 
 const ErrorMessage = ({ error }: { error?: string | null }) => {
   if (!error) {

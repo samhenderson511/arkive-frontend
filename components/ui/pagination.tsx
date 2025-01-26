@@ -10,7 +10,7 @@ export interface PaginationProps {
   variant?: "default" | "dots" | "numbers";
   loop?: boolean;
   onPageChange: (page: number) => void;
-  scrollTargetRef?: React.RefObject<HTMLDivElement>;
+  scrollTargetRef?: React.RefObject<HTMLDivElement | null>;
   hideButtons?: boolean;
 }
 
@@ -67,6 +67,7 @@ export const Pagination = ({
   };
 
   const numberButtons = getNumberButtons();
+  const paginationRange = 4;
 
   return (
     <div className={"flex gap items-center justify-center gap-6"}>
@@ -100,7 +101,11 @@ export const Pagination = ({
             if (pageDifference === 3) size = 0.5;
             if (pageDifference > 3) size = 0.33;
 
-            if (pageDifference > 3 && (1 > page - 3 || totalPages < page + 3)) return null;
+            if (
+              pageDifference > paginationRange &&
+              (1 < page - paginationRange || totalPages > page + paginationRange)
+            )
+              return null;
 
             return (
               <Button
@@ -116,8 +121,7 @@ export const Pagination = ({
                     currentPage !== page && "opacity-30",
                     "transition-all duration-300"
                   )}
-                  width={`${size}rem`}
-                  height={`${size}rem`}
+                  size={`${size}rem`}
                 />
               </Button>
             );

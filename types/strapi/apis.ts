@@ -1,9 +1,11 @@
-import { BlocksContent } from "@strapi/blocks-react-renderer";
-import { Media } from "./built-ins";
-import { DynamicZone } from "./built-ins";
+import type { BlocksContent } from "@strapi/blocks-react-renderer";
+import { DynamicZone, Media } from "./built-ins";
 import {
+  RepeatableAddress,
   RepeatableAnnouncement,
   RepeatableColourImage,
+  RepeatableLineItem,
+  RepeatableShipment,
   SingleSeo,
   UiBanner,
   UiBannerCarousel,
@@ -135,7 +137,7 @@ export interface ApiProduct extends ApiRoute {
   brand: ApiBrand;
   categories: ApiCategory[];
   description: BlocksContent;
-  images: RepeatableColourImage;
+  images: RepeatableColourImage[];
   name: string;
   season: ApiSeason;
   seo: SingleSeo;
@@ -147,6 +149,7 @@ export interface ApiProductVariant extends ApiRoute {
   name: string;
   price: number;
   product: ApiProduct;
+  taxRate: number;
   publishedAt: Date;
   size: string;
   sku: string;
@@ -163,4 +166,86 @@ export interface ApiSharedPage extends ApiRoute {
 export interface ApiSeo extends ApiRoute {
   page: string;
   seo: SingleSeo;
+}
+
+export interface ApiCart extends ApiRoute {
+  items: RepeatableLineItem[];
+  order: ApiOrder;
+  user: ApiUser;
+}
+
+export interface ApiDiscountCode extends ApiRoute {
+  amountOffPerItem: number;
+  amountOffTotal: number;
+  code: string;
+  endDate: Date;
+  maximumTotal: number;
+  maxRedemptions: number;
+  metadata: JSON;
+  minimumTotal: number;
+  orders: ApiOrder[];
+  percentageOff: number;
+  startDate: Date;
+  validCategories: ApiCategory[];
+  validProducts: ApiProduct[];
+  validSeasons: ApiSeason[];
+}
+
+export interface ApiGiftCard extends ApiRoute {
+  createdFrom: ApiOrder;
+  orders: ApiOrder[];
+  user: ApiUser;
+  value: number;
+}
+
+export interface ApiOrder extends ApiRoute {
+  billingAddress: RepeatableAddress;
+  cart: ApiCart;
+  discountCode: ApiDiscountCode;
+  discounts: number;
+  email: string;
+  eposTransactionId: string;
+  giftCard: ApiGiftCard;
+  locale: string;
+  orderStatus:
+    | "Awaiting Payment"
+    | "Processing"
+    | "Shipped"
+    | "Delivered"
+    | "Cancelled"
+    | "Returned"
+    | "Ready for Collection";
+  paymentData: JSON;
+  paymentMethod: string;
+  phone: string;
+  publishedAt: Date;
+  returns: ApiReturn[];
+  shipments: RepeatableShipment[];
+  shippingAddress: RepeatableAddress;
+  shippingMethod: ApiShippingMethod;
+  subtotal: number;
+  tax: number;
+  total: number;
+}
+
+export interface ApiShippingMethod extends ApiRoute {
+  allowFreeShippingDiscounts: boolean;
+  locale: string;
+  maximumOrderAmount: number;
+  metadata: JSON;
+  minimumOrderAmount: number;
+  name: string;
+  price: number;
+}
+
+export interface ApiReturn extends ApiRoute {
+  createdAt: Date;
+  createdBy: ApiUser;
+  items: RepeatableLineItem[];
+  locale: string;
+  localizations: ApiReturn[];
+  order: ApiOrder;
+  reason: "Defective" | "Wrong Size" | "Changed Mind";
+  refundAmount: number;
+  returnStatus: "Requested" | "Approved" | "Denied" | "Completed";
 }

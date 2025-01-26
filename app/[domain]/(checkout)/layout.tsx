@@ -1,4 +1,4 @@
-import { Button, Logo } from "@/components/common";
+import { Button, Logo } from "@/components/ui";
 import { getCategoryFromDomain } from "@/lib/data";
 import { IconChevronDown } from "@tabler/icons-react";
 import { Metadata } from "next";
@@ -26,7 +26,7 @@ export default async function CheckoutLayout(
   const { tab } = await getCategoryFromDomain(params.domain);
   return (
     <div className="relative w-full bg-background sm:min-h-screen divide-y divide-border">
-      <nav className="items-center h-16 px-4 mx-auto grid grid-cols-3 bg-background max-w-8xl sm:px-8">
+      <nav className="items-center h-16 px-4 mx-auto grid grid-cols-3 bg-background max-w-screen-2xl sm:px-8">
         <Button href="/cart" className="gap-3" variant={"link"}>
           <IconChevronDown className="rotate-90" size={16} />
           <span className="hidden mt-px sm:block txt-compact-plus text-ui-fg-subtle hover:text-ui-fg-base ">

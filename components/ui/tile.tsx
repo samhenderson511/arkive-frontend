@@ -1,5 +1,5 @@
 import { Text } from "@/components";
-import { transformAsset } from "@/lib/util/blurhash";
+import { transformAsset } from "@/lib/util/transform-asset";
 import { RepeatableGridTile } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,9 +11,9 @@ export async function Tile({ background, title, url }: RepeatableGridTile) {
   return (
     <Wrapper
       {...((url ? { href: url } : {}) as any)}
-      className="relative flex gap-8 p-6 items-end rounded-sm overflow-hidden group"
+      className="relative grow min-w-full sm:min-w-96 h-[100vw] lg:h-[30vw] flex p-3 lg:p-7 items-end overflow-hidden group"
     >
-      <Text element="h3" className="z-30 text-white">
+      <Text element="h3" elementStyle="h2" className="border-none z-30 text-white">
         {title}
       </Text>
 

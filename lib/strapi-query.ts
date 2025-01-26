@@ -1,7 +1,7 @@
-import { unstable_cache } from 'next/cache';
-import pluralize from 'pluralize';
-import QueryString from 'qs';
-import { IS_DEVELOPMENT } from './environment';
+import { unstable_cache } from "next/cache";
+import pluralize from "pluralize";
+import QueryString from "qs";
+import { IS_DEVELOPMENT } from "./environment";
 
 /**
  * Represents the structure of a Strapi API response.
@@ -207,7 +207,7 @@ type StrapiDynamicZonePopulate = {
  * Represents all possible ways to specify population in Strapi queries.
  */
 type StrapiPopulate =
-  | '*'
+  | "*"
   | string
   | string[]
   | Record<string, boolean | StrapiPopulateOperators | StrapiDynamicZonePopulate>
@@ -261,7 +261,7 @@ export type StrapiQueryOptions = {
     pageSize?: number;
     withCount?: boolean;
   };
-  status?: 'draft' | 'published';
+  status?: "draft" | "published";
   locale?: string | string[];
 };
 
@@ -300,7 +300,7 @@ type InferredPopulate<T> = {
  * Infers the structure of the populate option based on the given type T.
  * @template T The type to infer the populate structure from.
  */
-export type StrapiInferredQueryOptions<T> = Omit<StrapiQueryOptions, 'populate'> & {
+export type StrapiInferredQueryOptions<T> = Omit<StrapiQueryOptions, "populate"> & {
   populate?: StrapiPopulate | InferredPopulate<T>;
 };
 
@@ -317,7 +317,7 @@ export async function strapiQuery<T>({
   path,
   options = {},
   fetchOptions = {},
-  tags = []
+  tags = [],
 }: {
   path: string;
   options?: StrapiInferredQueryOptions<T>;
@@ -329,46 +329,50 @@ export async function strapiQuery<T>({
   const apiToken = process.env.STRAPI_API_TOKEN;
   const url = `${baseUrl}/${path}?${query}`;
   const transformedFetchOptions = {
-    method: 'GET',
+    method: "GET",
     ...fetchOptions,
     headers: {
       Authorization: `Bearer ${apiToken}`,
-      ...fetchOptions.headers
-    }
+      ...fetchOptions.headers,
+    },
   };
 
   try {
-    const json = await unstable_cache(
-      async () => {
-        return (await fetch(url, transformedFetchOptions).then((res) =>
+    const json =
+      // only cache GET requests
+      transformedFetchOptions.method === "GET" ?
+        await unstable_cache(
+          async () => {
+            return (await fetch(url, transformedFetchOptions).then((res) =>
+              res.json()
+            )) as StrapiResponse<T>;
+          },
+          [path, query],
+          {
+            tags: [
+              pluralize(path),
+              pluralize(path, 1),
+              ...(tags?.map((tag) => pluralize(tag)) || []),
+              ...(tags?.map((tag) => pluralize(tag, 1)) || []),
+            ],
+          }
+        )()
+      : ((await fetch(url, transformedFetchOptions).then((res) =>
           res.json()
-        )) as StrapiResponse<T>;
-      },
-      [path, query],
-      {
-        tags: [
-          pluralize(path),
-          pluralize(path, 1),
-          ...(tags?.map((tag) => pluralize(tag)) || []),
-          ...(tags?.map((tag) => pluralize(tag, 1)) || [])
-        ]
-      }
-    )();
+        )) as StrapiResponse<T>);
 
     if (IS_DEVELOPMENT) {
       const dataSize = (JSON.stringify(json).length / 1024).toFixed(1);
 
       const getColor = (size: string) => {
-        if (parseFloat(size) < 10) return '\x1b[32m';
-        if (parseFloat(size) < 100) return '\x1b[33m';
-        if (parseFloat(size) < 250) return '\x1b[93m';
-        if (parseFloat(size) < 500) return '\x1b[91m';
-        return '\x1b[31m'; // red for large data
+        if (parseFloat(size) < 10) return "\x1b[32m";
+        if (parseFloat(size) < 100) return "\x1b[33m";
+        if (parseFloat(size) < 250) return "\x1b[93m";
+        if (parseFloat(size) < 500) return "\x1b[91m";
+        return "\x1b[31m"; // red for large data
       };
 
-      console.log(
-        `${getColor(dataSize)}   [ ${dataSize} kB ] from STRAPI - ${path}?${query}\x1b[0m`
-      );
+      console.log(`${getColor(dataSize)}   [ ${dataSize} kB ] from ${url}\x1b[0m`);
     }
 
     if (json.error) {

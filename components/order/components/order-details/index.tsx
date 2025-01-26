@@ -1,4 +1,4 @@
-import { Button } from "@/components/common";
+import { Button } from "@/components/ui";
 import type { Order } from "@medusajs/client-types";
 import {
   IconArrowLeft,

@@ -1,9 +1,9 @@
 "use client";
 
-import { Logo } from "@/components/common";
 import { Button } from "@/components/common/button";
 import { EmptyState } from "@/components/home/components/product-list/empty-state";
 import OptionSelect from "@/components/products/components/option-select";
+import { Logo } from "@/components/ui";
 import { addToCart } from "@/lib/data";
 import { toTitleCase } from "@/lib/util";
 import { addOrUpdateSearchParam, removeSearchParam } from "@/lib/util/updateSearchParams";

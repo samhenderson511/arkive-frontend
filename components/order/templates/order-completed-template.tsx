@@ -1,10 +1,10 @@
 import Item from "@/components/cart/components/item";
-import { Button, CartTotals } from "@/components/common";
-import { Alert, AlertDescription, AlertTitle } from "@/components/common/alert";
-import { Badge } from "@/components/common/badge";
 import Help from "@/components/order/components/help";
 import OrderDetails from "@/components/order/components/order-details";
 import ShippingDetails from "@/components/order/components/shipping-details";
+import { Button, CartTotals } from "@/components/ui";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert/index";
+import { Badge } from "@/components/ui/badge/index";
 import { getCustomer } from "@/lib/medusaClient";
 import { getOrderStatus } from "@/lib/util/getOrderStatus";
 import type { Order } from "@medusajs/client-types";

@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/common";
 import { SheetContent } from "@/components/common/sheet";
+import { Button } from "@/components/ui";
 import type { Customer } from "@medusajs/client-types";
 import { IconMenu } from "@tabler/icons-react";
 import { barlow } from "app/fonts";

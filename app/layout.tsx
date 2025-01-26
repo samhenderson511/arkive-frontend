@@ -1,9 +1,10 @@
 import { Analytics } from "@vercel/analytics/next";
 import clsx from "clsx";
 import { Viewport } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { inter } from "./fonts";
 
-import "../styles/globals.css";
+import "./globals.css";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -16,8 +17,13 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={clsx("relative antialiased text-foreground bg-background", inter.className)}>
-        {children}
+      <body
+        className={clsx(
+          "relative antialiased text-foreground flex flex-col min-h-svh bg-background",
+          inter.className
+        )}
+      >
+        <NuqsAdapter>{children}</NuqsAdapter>
 
         <Analytics />
       </body>

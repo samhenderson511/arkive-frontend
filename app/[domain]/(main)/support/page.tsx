@@ -1,4 +1,4 @@
-import { Button, TitleBar } from "@/components/common";
+import { Button, TitleBar } from "@/components/ui";
 import { strapiFetch } from "@/lib/api";
 import { RichTextPage } from "types/strapi";
 
@@ -10,7 +10,7 @@ export default async function Support() {
 
   return (
     <div className={"flex justify-center  bg-card"}>
-      <div className={"max-w-8xl w-full items-center flex flex-col gap-8"}>
+      <div className={"max-w-screen-2xl w-full items-center flex flex-col gap-8"}>
         <TitleBar title={"Customer Support"} background={null} />
         <div className={"p-4 sm:p-8 pt-0 flex w-full"}>
           <section

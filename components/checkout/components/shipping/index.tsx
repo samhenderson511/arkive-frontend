@@ -1,8 +1,8 @@
 "use client";
 
 import { setShippingMethod } from "@/components/checkout/actions";
-import { Button, Label, RadioGroup, RadioGroupItem } from "@/components/common";
-import { Alert, AlertTitle } from "@/components/common/alert";
+import { Button, Label, RadioGroup, RadioGroupItem } from "@/components/ui";
+import { Alert, AlertTitle } from "@/components/ui/alert/index";
 import { formatAmount } from "@/lib/util";
 import type { Cart, ShippingOption } from "@medusajs/client-types";
 import { PricedShippingOption } from "@medusajs/client-types";

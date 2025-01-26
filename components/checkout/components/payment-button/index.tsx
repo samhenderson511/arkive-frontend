@@ -1,7 +1,7 @@
 "use client";
 
 import { placeOrder } from "@/components/checkout/actions";
-import { Button } from "@/components/common";
+import { Button } from "@/components/ui";
 import type { Cart, PaymentSession } from "@medusajs/client-types";
 import { OnApproveActions, OnApproveData } from "@paypal/paypal-js";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";

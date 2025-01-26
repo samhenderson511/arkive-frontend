@@ -1,7 +1,7 @@
 import { LOGIN_VIEW } from "@/components/account/templates/login-template";
 import ErrorMessage from "@/components/checkout/components/error-message";
 import { SubmitButton } from "@/components/checkout/components/submit-button";
-import { Button, Input } from "@/components/common";
+import { Button, Input } from "@/components/ui";
 import { logCustomerIn } from "@/lib/data";
 import { barlow } from "app/fonts";
 import clsx from "clsx";

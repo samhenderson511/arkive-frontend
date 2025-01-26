@@ -1,4 +1,4 @@
-import { TitleBar } from "@/components/common";
+import { TitleBar } from "@/components/ui";
 import { strapiFetch } from "@/lib/api";
 import { convertToHtml } from "@/lib/util/convertToHtml";
 import { notFound } from "next/navigation";
@@ -34,7 +34,7 @@ export default async function RichTextPage(props: { params: Promise<{ richText: 
 
   return (
     <div className={"flex justify-center  bg-card"}>
-      <div className={"max-w-8xl w-full items-center flex flex-col gap-8"}>
+      <div className={"max-w-screen-2xl w-full items-center flex flex-col gap-8"}>
         <TitleBar title={page?.PageTitle} background={page?.HeroBanner?.data} />
         <div className={"p-8 pt-0 flex w-full"}>
           <article

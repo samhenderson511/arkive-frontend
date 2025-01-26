@@ -4,7 +4,7 @@ import type { Customer } from "@medusajs/client-types";
 import React, { useEffect } from "react";
 import { useFormState } from "react-dom";
 
-import { Input } from "@/components/common";
+import { Input } from "@/components/ui";
 import { updateCustomerName } from "@/lib/data/updateCustomerName";
 
 import AccountInfo from "../account-info";

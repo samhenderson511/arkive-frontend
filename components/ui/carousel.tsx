@@ -79,17 +79,14 @@ function Carousel({
             autoPlayDuration ?
               Autoplay({
                 delay: autoPlayDuration,
-                stopOnInteraction: false,
+                stopOnInteraction: true,
               })
             : null,
             transition === "fade" ? Fade() : null,
           ].filter(Boolean) as React.ComponentProps<typeof CarouselRoot>["plugins"]
         }
         setApi={setApi}
-        className={cn(
-          layout === "padded" ? "p-4 sm:p-8 max-w-screen-2xl" : "p-0",
-          "w-full h-full relative"
-        )}
+        className={cn(layout === "padded" ? "pb-4 sm:pb-8" : "p-0", "w-full h-full relative")}
         {...rest}
       >
         <CarouselContent className={cn("h-full", classNames?.carouselContent)}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/common";
+import { Button } from "@/components/ui";
 import { IconLoader2 } from "@tabler/icons-react";
 import { track } from "@vercel/analytics";
 import React, { ComponentProps } from "react";

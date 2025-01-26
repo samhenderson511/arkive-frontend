@@ -1,4 +1,4 @@
-import { FilteredProductLayout } from "@/components/common";
+import { FilteredProductLayout } from "@/components/ui";
 import { strapiFetch } from "@/lib/api";
 import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
 import { getCategoryProducts } from "@/lib/data/getCategoryProducts";

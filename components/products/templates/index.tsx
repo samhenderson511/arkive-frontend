@@ -25,7 +25,7 @@ async function ProductTemplate({ product, brand, region }: ProductTemplateProps)
   return (
     <>
       <div className={"flex flex-1 flex-col justify-center px-4 lg:px-8"}>
-        <div className="relative flex flex-col w-full py-8 mx-auto gap-8 max-w-8xl">
+        <div className="relative flex flex-col w-full py-8 mx-auto gap-8 max-w-screen-2xl">
           <Breadcrumbs product={product} />
           <div className="flex flex-col lg:flex-row gap-8 lg:items-start">
             <div className="flex flex-col w-full gap-8">

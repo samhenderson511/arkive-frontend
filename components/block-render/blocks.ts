@@ -1,4 +1,5 @@
 import { BannerBlock } from "./banner-block";
+import { BannerCarouselBlock } from "./banner-carousel-block";
 import { BlocksBlock } from "./blocks-block";
 import { BrandsBlock } from "./brands-block";
 import { ButtonBlock } from "./button-block";
@@ -25,7 +26,7 @@ export const blocks: Record<
   "ui.button": { component: ButtonBlock },
   "ui.card": { component: CardBlock },
   "ui.grid-tiles": { component: GridTilesBlock },
-  "ui.banner-carousel": { component: BannerBlock },
+  "ui.banner-carousel": { component: BannerCarouselBlock },
   "ui.banner": { component: BannerBlock },
   "ui.products-carousel": { component: ProductCarouselBlock },
   "ui.categories": { component: CategoriesBlock },

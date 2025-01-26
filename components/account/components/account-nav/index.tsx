@@ -8,7 +8,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/common";
+} from "@/components/ui";
 import { signOut } from "@/lib/data";
 import { IconLogout } from "@tabler/icons-react";
 import { barlow } from "app/fonts";

@@ -7,7 +7,7 @@ import * as React from "react";
 import { ComponentProps, ReactNode } from "react";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  "inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
@@ -23,12 +23,12 @@ const buttonVariants = cva(
         true: "pointer-events-none",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        responsive: "h-9 px-3 text-sm sm:text-base sm:h-10 sm:px-4",
-        sm: "h-9 rounded-md px-3 text-sm",
-        lg: "h-12 rounded-md px-8",
-        icon: "h-10 w-10",
-        smIcon: "h-9 w-9",
+        default: "h-10 px-4 py-2 text-sm rounded-full",
+        responsive: "h-9 px-3 text-sm sm:h-10 sm:px-4 rounded-full",
+        sm: "h-9 rounded-md px-3 text-sm rounded-full",
+        lg: "h-12 rounded-md px-8 rounded-full",
+        icon: "h-10 w-10 rounded-full",
+        smIcon: "h-9 w-9 rounded",
       },
     },
     defaultVariants: {

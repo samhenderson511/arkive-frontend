@@ -1,13 +1,14 @@
-import { transformAsset } from "@/lib/util/blurhash";
+import { transformAsset } from "@/lib/util/transform-asset";
 import { UiCard } from "@/types";
-import { BlocksRenderer } from "@strapi/blocks-react-renderer";
+import clsx from "clsx";
 import Image from "next/image";
 import { Carousel } from "../ui/carousel";
 import { ButtonBlock } from "./button-block";
+import { BlocksRenderer } from "./strapi-blocks-renderer";
 
-export function CardBlock({ content, images, buttons }: UiCard) {
+export function CardBlock({ content, images, buttons, className }: UiCard & { className: string }) {
   return (
-    <section className="flex @container w-full max-w-screen-2xl">
+    <section className={clsx("flex @container w-full max-w-screen-2xl", className)}>
       <div className="grid grid-cols-1 w-full px-4 @4xl:px-8 gap-4 @4xl:gap-8 @4xl:grid-cols-2 @4xl:items-center">
         <div className="order-2 w-full">
           <Carousel

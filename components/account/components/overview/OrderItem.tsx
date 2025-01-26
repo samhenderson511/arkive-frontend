@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/common";
-import { Badge } from "@/components/common/badge";
+import { Button } from "@/components/ui";
+import { Badge } from "@/components/ui/badge/index";
 import { cn, formatAmount } from "@/lib/util";
 import { getOrderStatus } from "@/lib/util/getOrderStatus";
 import type { Order } from "@medusajs/client-types";

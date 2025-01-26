@@ -1,4 +1,4 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/common";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui";
 import type { Region } from "@medusajs/client-types";
 import { forwardRef, useImperativeHandle, useMemo, useRef } from "react";
 

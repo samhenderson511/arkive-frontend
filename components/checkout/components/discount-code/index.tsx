@@ -3,9 +3,9 @@
 import { removeDiscount, removeGiftCard, submitDiscountForm } from "@/components/checkout/actions";
 import ErrorMessage from "@/components/checkout/components/error-message";
 import { SubmitButton } from "@/components/checkout/components/submit-button";
-import { Button, Input, Label } from "@/components/common";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Button, Input, Label } from "@/components/ui";
 import { formatAmount } from "@/lib/util";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { Cart } from "@medusajs/client-types";
 import { IconMinus, IconPlus, IconTrash } from "@tabler/icons-react";
 import React, { useMemo } from "react";

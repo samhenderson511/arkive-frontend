@@ -1,5 +1,5 @@
 import { ContactForm } from "@/components/ContactForm";
-import { Button, Socials } from "@/components/common";
+import { Button, Socials } from "@/components/ui";
 import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
 import { convertToHtml } from "@/lib/util/convertToHtml";
 import { IconMail, IconPhone } from "@tabler/icons-react";
@@ -20,7 +20,7 @@ export default async function Contact(props: StoreTabPageProps) {
 
   return (
     <div className={"flex justify-center p-8 py-12 bg-card"}>
-      <div className={"max-w-8xl w-full grid gap-8 grid-cols-1 lg:grid-cols-2"}>
+      <div className={"max-w-screen-2xl w-full grid gap-8 grid-cols-1 lg:grid-cols-2"}>
         <section
           className={"rounded-sm px-8 py-16 border-border border flex flex-col gap-4 bg-background"}
         >

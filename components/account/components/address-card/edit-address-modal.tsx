@@ -2,14 +2,7 @@
 
 import CountrySelect from "@/components/checkout/components/country-select";
 import { SubmitButton } from "@/components/checkout/components/submit-button";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-  Input,
-} from "@/components/common";
+import { Button, Dialog, DialogContent, DialogFooter, DialogTitle, Input } from "@/components/ui";
 import { deleteCustomerShippingAddress, updateCustomerShippingAddress } from "@/lib/data";
 import type { Address, Region } from "@medusajs/client-types";
 import { IconEdit, IconLoader2, IconTrash } from "@tabler/icons-react";
