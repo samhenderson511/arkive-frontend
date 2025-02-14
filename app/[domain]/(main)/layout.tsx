@@ -1,7 +1,6 @@
 import {
   BottomNavigation,
   CartSheet,
-  CartWrapper,
   MobileNavigation,
   NavigationSheet,
   SearchSheet,
@@ -10,7 +9,7 @@ import {
 import { Transition } from "@/components/layout/transition";
 import { AnnouncementBar, Footer } from "@/components/server";
 import { NestedRepeaterLink } from "@/lib";
-import { getSite, strapiQuery, toTitleCase, transformAsset } from "@/lib/server";
+import { getSite, strapiQuery, toTitleCase } from "@/lib/server";
 import { ApiBrand, ApiCategory, ApiSite } from "@/types";
 import { notFound } from "next/navigation";
 
@@ -27,11 +26,25 @@ export default async function PageLayout({
     populate: {
       logo: true,
       category: {
-        populate: { children: true },
+        populate: {
+          children: true,
+        },
       },
       announcements: true,
     },
   });
+
+  if (!site) {
+    return notFound();
+  }
+
+  const logo = {
+    src: site.logo.url || "",
+    alt: site.logo.alternativeText || "",
+    width: site.logo.width || 0,
+    height: site.logo.height || 0,
+  };
+
   const { data: sites } = await strapiQuery<ApiSite[]>({
     path: "sites",
     options: {
@@ -40,25 +53,61 @@ export default async function PageLayout({
     },
   });
 
-  if (!site) {
-    return notFound();
-  }
+  const { data: departments } = await strapiQuery<ApiCategory[]>({
+    path: "categories",
+    options: {
+      populate: { children: true },
+      filters: {
+        parent: {
+          documentId: { $eq: site.category?.documentId },
+        },
+        products: {
+          variants: {
+            stock: { $gt: 0 },
+          },
+        },
+      },
+    },
+  });
 
-  const departments = site?.category?.children;
-  const logo = await transformAsset(site.logo);
   const { data: subDepartments } = await strapiQuery<ApiCategory[]>({
     path: "categories",
     options: {
       populate: { parent: true },
       filters: {
         parent: { documentId: { $in: departments?.map(({ documentId }) => documentId) } },
+        products: {
+          variants: {
+            stock: {
+              $gt: 0,
+            },
+          },
+        },
       },
     },
   });
+
   const { data: brands } = await strapiQuery<ApiBrand[]>({
     path: "brands",
-    options: { populate: { logo: true } },
+    options: {
+      populate: { logo: true },
+      filters: {
+        products: {
+          categories: {
+            documentId: {
+              $in: site.category.documentId,
+            },
+          },
+          variants: {
+            stock: {
+              $gt: 0,
+            },
+          },
+        },
+      },
+    },
   });
+
   const links: NestedRepeaterLink[] = [
     {
       label: "Home",
@@ -95,7 +144,7 @@ export default async function PageLayout({
   const topNavigationHeight = 48;
 
   return (
-    <CartWrapper>
+    <>
       <AnnouncementBar announcements={site.announcements} />
 
       <TopNavigation sites={sites} site={site} />
@@ -120,6 +169,6 @@ export default async function PageLayout({
       <CartSheet />
       <SearchSheet categories={categories} brands={brands} rootCategory={site.category.name} />
       <NavigationSheet links={links} />
-    </CartWrapper>
+    </>
   );
 }

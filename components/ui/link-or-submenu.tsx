@@ -35,13 +35,15 @@ export function LinkOrSubMenu({ link }: { link: NestedRepeaterLink }) {
           className={cn(buttonVariants({ className: buttonClassName, ...buttonVariant }))}
         >
           <NavigationMenuLink asChild>
-            <Link href={link.url || ""}>{link.label}</Link>
+            <Link href={encodeURI(link.url).toLowerCase() || ""}>{link.label}</Link>
           </NavigationMenuLink>
         </NavigationMenuTrigger>
 
         <NavigationMenuContent asChild>
           <div className="flex w-full flex-col gap-4 px-8 py-4">
-            <Text element="h5">{link.label}</Text>
+            <Text element="h5" className="font-semibold">
+              {link.label}
+            </Text>
 
             <ul className="grid grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-4 min-w-[75%] w-max">
               {link.subMenu.map((subLink) => (
@@ -49,9 +51,8 @@ export function LinkOrSubMenu({ link }: { link: NestedRepeaterLink }) {
                   <NavigationMenuLink asChild>
                     <Button
                       variant="link"
-                      size="lg"
                       className="px-0 gap-5 w-full justify-start"
-                      href={subLink.url || ""}
+                      href={encodeURI(subLink.url).toLowerCase() || ""}
                     >
                       {link.subMenu?.some(({ logo }) => logo) ?
                         <>
@@ -82,7 +83,11 @@ export function LinkOrSubMenu({ link }: { link: NestedRepeaterLink }) {
   return (
     <NavigationMenuItem value={link.label}>
       <NavigationMenuLink asChild>
-        <Button {...buttonVariant} href={link.url} className={buttonClassName}>
+        <Button
+          {...buttonVariant}
+          href={encodeURI(link.url).toLowerCase()}
+          className={buttonClassName}
+        >
           {link.label}
         </Button>
       </NavigationMenuLink>

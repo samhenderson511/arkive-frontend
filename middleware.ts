@@ -1,9 +1,6 @@
 import { NextURL } from "next/dist/server/web/next-url";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { strapiQuery } from "./lib/strapi-query";
 import { getPreviewDomain } from "./lib/util/get-preview-domain";
-import { ApiCart } from "./types";
 
 export const config = {
   matcher: [
@@ -28,31 +25,7 @@ export default async function middleware(req: NextRequest) {
 
   const path = getRequestPath(url);
 
-  await setCartCookie();
-
   return handleRewrite(url, hostname, path);
-}
-
-async function setCartCookie() {
-  const awaitedCookies = await cookies();
-  const cartId = awaitedCookies.get("cartId")?.value;
-
-  if (!cartId) {
-    const cart = await strapiQuery<ApiCart>({
-      path: "carts?status=published",
-      fetchOptions: {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          data: {},
-        }),
-      },
-    });
-
-    awaitedCookies.set("cartId", cart?.data?.documentId);
-  }
 }
 
 function handleRewrite(url: NextURL, hostname: string, path: string) {

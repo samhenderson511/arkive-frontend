@@ -1,0 +1,18 @@
+{
+  "Black": "!bg-zinc-900 !text-zinc-50",
+  "Blue": "!bg-sky-500 !text-sky-50",
+  "Brown": "!bg-stone-700 !text-stone-50",
+  "Burgundy": "!bg-pink-900 !text-pink-50",
+  "Gold": "!bg-amber-400 !text-amber-50",
+  "Green": "!bg-emerald-500 !text-emerald-50",
+  "Grey": "!bg-zinc-500 !text-zinc-50",
+  "Multi": "!bg-gradient-to-r from-blue-500 to-yellow-500 !text-white/70",
+  "Neutral": "!bg-zinc-500 !text-zinc-50",
+  "Orange": "!bg-orange-500 !text-orange-50",
+  "Purple": "!bg-purple-500 !text-purple-50",
+  "Pink": "!bg-pink-500 !text-pink-50",
+  "Red": "!bg-red-500 !text-red-50",
+  "Silver": "!bg-zinc-200 !text-zinc-900",
+  "White": "!bg-zinc-50 !text-zinc-900",
+  "Yellow": "!bg-yellow-500 !text-yellow-50"
+}

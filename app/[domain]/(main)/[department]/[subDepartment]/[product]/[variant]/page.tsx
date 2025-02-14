@@ -16,6 +16,9 @@ export async function generateStaticParams({ params: { domain } }: { params: { d
               },
             },
             populate: {
+              variants: {
+                fields: ["name"],
+              },
               categories: {
                 populate: {
                   parent: true,
@@ -32,7 +35,7 @@ export async function generateStaticParams({ params: { domain } }: { params: { d
     return [];
   }
 
-  const params = site.category?.products?.map((prod) => {
+  const params = site.category?.products?.flatMap((prod) => {
     const rootCategory = prod.categories?.find((cat) => !cat.parent);
     const {
       cat = "",
@@ -40,13 +43,16 @@ export async function generateStaticParams({ params: { domain } }: { params: { d
       subDept = "",
     } = rootCategory ? constructHierarchy(rootCategory, prod) : {};
 
-    return {
+    return prod.variants.map((v) => ({
       domain: site.domain,
       department: dept?.split(cat)[1].replaceAll(" > ", "").toLowerCase(),
       subDepartment: subDept?.split(dept)[1].replaceAll(" > ", "").toLowerCase(),
       product: prod.name.toLowerCase(),
-    };
+      variant: v.name.toLowerCase(),
+    }));
   });
+
+  console.log(params);
 
   return params || [];
 }
@@ -54,7 +60,13 @@ export async function generateStaticParams({ params: { domain } }: { params: { d
 export default async function Product({
   params,
 }: {
-  params: Promise<{ domain: string; department: string; subDepartment: string; product: string }>;
+  params: Promise<{
+    domain: string;
+    department: string;
+    subDepartment: string;
+    product: string;
+    variant: string;
+  }>;
 }) {
   return <ProductPage params={params} />;
 }

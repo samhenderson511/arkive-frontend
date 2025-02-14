@@ -27,4 +27,3 @@ export * from "./search/search-sheet-box";
 export * from "./search/search-sheet-results";
 
 export * from "./cart/cart-sheet";
-export * from "./cart/cart-wrapper";

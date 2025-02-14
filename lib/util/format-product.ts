@@ -1,30 +1,41 @@
-import { ApiCategory, ApiProduct, ProductSearchResult } from "@/types";
+import { ApiCategory, ApiProduct, ApiProductVariant, ProductSearchResult } from "@/types";
 
-export function formatProduct(product: ApiProduct): ProductSearchResult {
-  // Function to construct the slug
-  const constructHierarchy = (category: ApiCategory) => {
-    const categoryPath = [];
-    let currentCategory: ApiCategory | undefined = category;
+export function constructHierarchy(rootCategory: ApiCategory, product: ApiProduct) {
+  const categoryPath = [];
+  let currentCategory: ApiCategory | undefined = rootCategory;
 
-    while (currentCategory) {
-      if (currentCategory) {
-        categoryPath.push(currentCategory.name);
-      }
-
-      currentCategory = product.categories?.find(
-        (cat) => cat.parent?.documentId === currentCategory?.documentId
-      );
+  while (currentCategory) {
+    if (currentCategory) {
+      categoryPath.push(currentCategory.name);
     }
 
-    const categories = {
-      cat: categoryPath[0],
-      dept: categoryPath.slice(0, 2).join(" > "),
-      subDept: categoryPath.join(" > "),
-    };
+    currentCategory = product.categories?.find(
+      (cat) => cat.parent?.documentId === currentCategory?.documentId
+    );
+  }
 
-    return categories;
+  const categories = {
+    cat: categoryPath[0],
+    dept: categoryPath.slice(0, 2).join(" > "),
+    subDept: categoryPath.join(" > "),
   };
 
+  return categories;
+}
+
+export function getVariantPrice(variant: ApiProductVariant) {
+  const highestDiscount = Math.max(
+    ...variant.product?.applicableSales?.map((sale) => sale.discountPercentage),
+    0
+  );
+
+  return {
+    price: variant.price,
+    salePrice: variant.price - (variant.price * highestDiscount) / 100,
+  };
+}
+
+export function formatProduct(product: ApiProduct): ProductSearchResult {
   const highestDiscount = Math.max(
     ...product.applicableSales?.map((sale) => sale.discountPercentage),
     0
@@ -49,7 +60,7 @@ export function formatProduct(product: ApiProduct): ProductSearchResult {
   const document = {
     id: product.documentId,
     name: product.name,
-    categories: rootCategory ? constructHierarchy(rootCategory) : {},
+    categories: rootCategory ? constructHierarchy(rootCategory, product) : {},
     createdAt: new Date(product.createdAt).getTime(),
     colourGroups: Array.from(new Set(inStockColourGroups)) || [],
     images: inStockImages?.map((image) => ({
@@ -64,6 +75,7 @@ export function formatProduct(product: ApiProduct): ProductSearchResult {
     brand: product.brand?.name,
     sizes: Array.from(new Set(inStockVariants?.map((variant) => variant?.size) || [])),
     price: parseFloat(minPrice.toFixed(2)),
+    salePrice: parseFloat((minPrice * (1 - highestDiscount / 100)).toFixed(2)),
     discount: highestDiscount,
   };
 

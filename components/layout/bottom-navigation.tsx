@@ -3,7 +3,6 @@
 import { NestedRepeaterLink, useElementWidth, useGlobal, useIsScrolled } from "@/lib";
 import { IconBasketFilled, IconSearch, IconUserFilled } from "@tabler/icons-react";
 import clsx from "clsx";
-import type Image from "next/image";
 import Link from "next/link";
 import { ComponentProps, useState } from "react";
 import { Button } from "../ui/button";
@@ -14,7 +13,7 @@ import { NavigationMenu } from "../ui/navigation-menu";
 interface Props {
   links: NestedRepeaterLink[];
   scrollThreshold: number;
-  logo: ComponentProps<typeof Image>;
+  logo: ComponentProps<"img">;
 }
 
 export function BottomNavigation({ links, scrollThreshold, logo }: Props) {

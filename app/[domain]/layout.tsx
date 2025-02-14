@@ -85,3 +85,5 @@ export default async function DomainLayout({
 
   return <Theme site={site}>{children}</Theme>;
 }
+
+export const dynamicParams = true;

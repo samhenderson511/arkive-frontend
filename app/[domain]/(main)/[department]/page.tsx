@@ -1,88 +1,106 @@
-import { FilteredProductLayout } from "@/components/ui";
-import { strapiFetch } from "@/lib/api";
-import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
-import { getCategoryProducts } from "@/lib/data/getCategoryProducts";
-import { getCategoryTitle } from "@/lib/data/getCategoryTitle";
-import { getDepartments } from "@/lib/data/getDepartments";
-import { getRegion } from "@/lib/data/getRegion";
+import { SearchContext } from "@/components";
+import { getMarginClassNames } from "@/components/block-render";
+import { BannerBlock } from "@/components/block-render/banner-block";
+import { Transition } from "@/components/layout/transition";
+import { DefaultResults } from "@/components/search/default-results";
+import { getSite, strapiQuery } from "@/lib/server";
+import { ApiCategory } from "@/types";
 import { notFound } from "next/navigation";
-import { DepartmentPageProps, StoreTabPageProps } from "types/global";
-import { BannerCategory } from "types/strapi";
 
-export { generateMetadata } from "./metadata";
-
-export async function generateStaticParams({ params }: StoreTabPageProps) {
-  const { handle } = await getCategoryFromDomain(params.domain);
-  const departments = await getDepartments(handle);
-
-  const newParams = departments?.map((dep) => ({
-    domain: params.domain,
-    department: dep.name,
-  }));
-
-  return newParams || [];
-}
-
-export default async function Department(props: DepartmentPageProps) {
-  const params = await props.params;
-  const { domain, department, countryCode } = params;
-  const { tab, handleAsParam } = await getCategoryFromDomain(domain);
-  const region = await getRegion(countryCode);
-
-  const handle = `/${handleAsParam}/${department}`.toUpperCase();
-
-  const page: BannerCategory[] = await strapiFetch({
-    endpoint: "banner-categories",
-    params: { "filters[Handle][$eq]": handle },
-    depth: 3,
+export async function generateStaticParams({ params: { domain } }: { params: { domain: string } }) {
+  const site = await getSite(domain, {
+    populate: {
+      category: true,
+    },
   });
 
-  if (!page?.[0]?.attributes?.CategoryBanner?.Title) {
-    const title = await getCategoryTitle(handle);
-
-    if (!title) return notFound();
-
-    page.push({
-      attributes: {
-        CategoryBanner: {
-          Title: title,
-        },
-      },
-    });
+  if (!site) {
+    return [];
   }
 
-  const filterData = await getCategoryProducts({
-    categoryHandle: handle,
-    region,
-    productOptions: {
-      select: ["id", "handle", "metadata"],
-      relations: [],
+  const { data: departments } = await strapiQuery<ApiCategory[]>({
+    path: "categories",
+    options: {
+      populate: { children: true },
+      filters: {
+        parent: {
+          documentId: { $eq: site.category?.documentId },
+        },
+        products: {
+          variants: {
+            stock: { $gt: 0 },
+          },
+        },
+      },
     },
-    variantOptions: {
-      fields: "id,product_id,metadata",
-      expand: "prices",
-    },
-    limit: 1000,
   });
 
-  const products = await getCategoryProducts({
-    categoryHandle: handle,
-    region,
-    limit: 72,
+  const params = departments?.map((dep) => ({
+    domain: site.domain,
+    department: dep.name.toLowerCase(),
+  }));
+
+  return params || [];
+}
+
+export default async function Department({
+  params,
+}: {
+  params: Promise<{ domain: string; department: string }>;
+}) {
+  const { domain, department: departmentParam } = await params;
+
+  const site = await getSite(domain, {
+    populate: { category: true },
   });
-  if (!products?.length) {
+
+  if (!site) {
     return notFound();
   }
 
+  const { banner, ...department } = await strapiQuery<ApiCategory[]>({
+    path: "categories",
+    options: {
+      populate: { parent: true, banner: { populate: { background: true } } },
+      filters: {
+        name: { $eqi: decodeURIComponent(departmentParam) },
+        parent: { name: { $eqi: site.category?.name } },
+      },
+    },
+  }).then((res) => res.data?.[0]);
+
+  if (!department) {
+    return notFound();
+  }
+
+  const departmentPath = `${site.category.name} > ${department.name}`;
+  const hasBanner = banner?.title || banner?.background;
+
   return (
-    <FilteredProductLayout
-      filterData={filterData}
-      region={region}
-      page={page?.[0].attributes.CategoryBanner}
-      category={tab}
-      products={products}
-    />
+    <>
+      {hasBanner && (
+        <Transition transitionName="fadeInUp">
+          <BannerBlock {...banner} />
+        </Transition>
+      )}
+
+      <SearchContext
+        indexName={"arkive:products"}
+        configure={{
+          hitsPerPage: 36,
+          filters: `categories.dept:=:${departmentPath}`,
+        }}
+      >
+        <Transition waitForInView transitionName="fadeInUp">
+          <DefaultResults
+            rootPath={site.category.name}
+            className={getMarginClassNames({
+              topMargin: hasBanner ? "Less" : "More",
+              bottomMargin: "Default",
+            })}
+          />
+        </Transition>
+      </SearchContext>
+    </>
   );
 }
-
-export const maxDuration = 60;

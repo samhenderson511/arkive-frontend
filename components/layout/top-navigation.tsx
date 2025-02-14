@@ -1,12 +1,16 @@
 import { cn } from "@/lib";
-import { transformAsset } from "@/lib/server";
 import { ApiSite } from "@/types";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Logo } from "../ui/logo";
 
 export async function TopNavigation({ sites, site }: { sites: ApiSite[]; site: ApiSite }) {
-  const logo = await transformAsset(site.logo);
+  const logo = {
+    src: site.logo.url || "",
+    alt: site.logo.alternativeText || "",
+    width: site.logo.width || 0,
+    height: site.logo.height || 0,
+  };
 
   return (
     <div className="flex h-14 px-8 justify-center w-full border-b border-border/30">

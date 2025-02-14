@@ -1,13 +1,13 @@
 "use client";
 
+import { useGlobal } from "@/lib";
 import { ApiBrand, ApiCategory } from "@/types";
 import { IconSearch } from "@tabler/icons-react";
 import Fuse from "fuse.js";
+import { throttle } from "lodash";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchBox } from "react-instantsearch";
 import { Input } from "../form/input";
-import { debounce, throttle } from "lodash";
-import { useGlobal } from "@/lib";
 
 export function SearchSheetBox({
   brands,
@@ -52,8 +52,8 @@ export function SearchSheetBox({
     }
   }
 
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
+  const throttledSearch = useCallback(
+    throttle((value: string) => {
       refine(value);
       handleLocalSearch(value);
     }, 1000),
@@ -62,9 +62,8 @@ export function SearchSheetBox({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-
     setSearchValue(value);
-    debouncedSearch(value);
+    throttledSearch(value);
   };
 
   return (

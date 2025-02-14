@@ -1,6 +1,6 @@
 "use client";
 
-import { transformAssetClient } from "@/lib";
+import { transformAssetClient, useGlobal } from "@/lib";
 import { GBP, toTitleCase } from "@/lib/server";
 import { ProductSearchResult } from "@/types";
 import clsx from "clsx";
@@ -10,8 +10,10 @@ import { constructSlug } from "../../lib/util/construct-slug";
 import { Text } from "../ui/text";
 
 export function SheetHit({ hit }: { hit: ProductSearchResult }) {
+  const { setOpenSearch } = useGlobal();
+
   const firstImage = hit.images.find((image) => image.url);
-  const slug = constructSlug(hit);
+  const slug = constructSlug(hit.categories?.subDept, hit.name);
 
   const image = transformAssetClient(
     firstImage ?
@@ -25,7 +27,11 @@ export function SheetHit({ hit }: { hit: ProductSearchResult }) {
   );
 
   return (
-    <Link href={`/${slug}`} className="flex items-start justify-start group gap-3 my-1">
+    <Link
+      href={`/${slug}`}
+      onClick={() => setOpenSearch(false)}
+      className="flex items-start justify-start group gap-3 my-1"
+    >
       <div className="size-16 shrink-0 group-hover:border-border border transition border-transparent ease-out rounded-lg overflow-hidden relative">
         <Image {...image} fill className="object-cover" sizes="64px" />
       </div>
@@ -38,23 +44,25 @@ export function SheetHit({ hit }: { hit: ProductSearchResult }) {
           {toTitleCase(hit.name)}
         </Text>
 
-        <Text
-          element="span"
-          className={clsx(
-            {
-              "line-through": hit.discount !== 0,
-            },
-            "text-sm text-muted-foreground"
-          )}
-        >
-          {GBP.format(hit.price)}
-        </Text>
-
-        {hit.discount !== 0 && (
-          <Text element="span" className="text-sm font-medium text-destructive leading-none">
-            {GBP.format(hit.price - hit.price * (hit.discount / 100))}
+        <div className="flex gap-3 mt-1">
+          <Text
+            element="span"
+            className={clsx(
+              {
+                "line-through": hit.salePrice !== hit.price,
+              },
+              "text-muted-foreground leading-none"
+            )}
+          >
+            {GBP.format(hit.price)}
           </Text>
-        )}
+
+          {hit.salePrice !== hit.price && (
+            <Text element="span" className="font-medium text-destructive leading-none">
+              {GBP.format(hit.salePrice)}
+            </Text>
+          )}
+        </div>
       </div>
     </Link>
   );

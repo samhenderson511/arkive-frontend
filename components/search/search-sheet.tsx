@@ -42,6 +42,7 @@ export function SearchSheet({
 
         <SearchContext
           indexName="arkive:products"
+          routing={false}
           configure={{
             hitsPerPage: 10,
             filters: rootCategory ? `categories.cat:${rootCategory}` : undefined,

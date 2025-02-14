@@ -67,7 +67,10 @@ export const CategoriesClient = ({ categories, className }: Props) => {
                   onMouseEnter={() => {
                     setCurrentImage(cat.background);
                   }}
-                  className={cn(textStyles.h1, "hover:no-underline opacity-75 hover:opacity-100")}
+                  className={cn(
+                    textStyles.h1,
+                    "font-black hover:no-underline opacity-75 hover:opacity-100"
+                  )}
                 >
                   {cat.name}
                 </Button>

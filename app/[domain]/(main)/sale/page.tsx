@@ -1,31 +1,49 @@
-import { FilteredProductLayout } from "@/components/ui";
-import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
-import { getRegion } from "@/lib/data/getRegion";
-import { getSaleProducts } from "@/lib/data/getSaleProducts";
+import { SearchContext } from "@/components";
+import { getMarginClassNames } from "@/components/block-render";
+import { BannerBlock } from "@/components/block-render/banner-block";
+import { Transition } from "@/components/layout/transition";
+import { DefaultResults } from "@/components/search/default-results";
+import { getSite } from "@/lib/server";
 import { notFound } from "next/navigation";
-import { StoreTabPageProps } from "types/global";
 
-export { generateMetadata } from "./metadata";
+export default async function Sale({ params }: { params: Promise<{ domain: string }> }) {
+  const { domain } = await params;
 
-async function Sale(props: StoreTabPageProps) {
-  const params = await props.params;
-  const { tab, handle } = await getCategoryFromDomain(params.domain);
-  const region = await getRegion(params.countryCode);
+  const site = await getSite(decodeURIComponent(domain), {
+    populate: { saleBanner: { populate: { background: true } }, category: true },
+  });
 
-  const page = tab?.SalePageBanner;
-  if (!page) return notFound();
+  if (!site) {
+    return notFound();
+  }
 
-  const products = await getSaleProducts(handle, region);
+  const hasBanner = site.saleBanner?.title || site.saleBanner?.background;
 
   return (
-    <FilteredProductLayout
-      page={page}
-      category={tab}
-      region={region}
-      products={products}
-      filterData={products}
-    />
+    <>
+      {hasBanner && (
+        <Transition transitionName="fadeInUp">
+          <BannerBlock {...site.saleBanner} />
+        </Transition>
+      )}
+
+      <SearchContext
+        indexName={"arkive:products"}
+        configure={{
+          hitsPerPage: 36,
+          filters: `categories.cat:=:${site.category.name} && discount:>0`,
+        }}
+      >
+        <Transition waitForInView transitionName="fadeInUp">
+          <DefaultResults
+            rootPath={site.category.name}
+            className={getMarginClassNames({
+              topMargin: hasBanner ? "Less" : "More",
+              bottomMargin: "Default",
+            })}
+          />
+        </Transition>
+      </SearchContext>
+    </>
   );
 }
-
-export default Sale;

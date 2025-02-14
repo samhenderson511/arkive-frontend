@@ -5,7 +5,8 @@ import { BannerBlock } from "./banner-block";
 export function BannerCarouselBlock({
   slides,
   className,
-}: UiBannerCarousel & { className?: string }) {
+  height = "small",
+}: UiBannerCarousel & { className?: string; height?: "small" | "large" }) {
   return (
     <Carousel
       className={className}
@@ -15,7 +16,7 @@ export function BannerCarouselBlock({
         carouselContent: "ml-0 sm:ml-0",
         pagination: "[&>div]:justify-start",
       }}
-      items={slides?.map((slide) => <BannerBlock key={slide.title} {...slide} />)}
+      items={slides?.map((slide) => <BannerBlock height={height} key={slide.title} {...slide} />)}
       hideButtons
     />
   );

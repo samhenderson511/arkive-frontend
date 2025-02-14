@@ -13,14 +13,13 @@ import {
   useVelocity,
 } from "framer-motion";
 import { toLower } from "lodash";
-import Image from "next/image";
 import Link from "next/link";
 import { ComponentProps, useRef } from "react";
 import slugify from "slugify";
 
 type ClientBrand = {
   name: string;
-  logo: ComponentProps<typeof Image>;
+  logo: ComponentProps<"img">;
 };
 
 interface Props {
@@ -28,6 +27,8 @@ interface Props {
   scrollSpeed: number;
   className?: string;
 }
+
+// this one does not work as expected
 
 export function BrandsClient({ brands, scrollSpeed, className }: Props) {
   const baseX = useMotionValue(0);
@@ -45,7 +46,13 @@ export function BrandsClient({ brands, scrollSpeed, className }: Props) {
   const directionFactor = useRef<number>(1);
   useAnimationFrame((t, delta) => {
     let moveBy = directionFactor.current * (scrollSpeed || 3) * (delta / 1000);
-    directionFactor.current = velocityFactor.get() < 0 ? -0.75 : 0.75;
+
+    if (velocityFactor.get() < 0) {
+      directionFactor.current = -0.75;
+    } else if (velocityFactor.get() > 0) {
+      directionFactor.current = 0.75;
+    }
+
     moveBy += directionFactor.current * moveBy * velocityFactor.get();
     baseX.set(baseX.get() + moveBy);
   });

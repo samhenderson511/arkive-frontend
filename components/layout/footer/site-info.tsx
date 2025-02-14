@@ -1,10 +1,14 @@
 import { BlocksRenderer, Logo } from "@/components";
-import { transformAsset } from "@/lib/util/transform-asset";
 import { ApiSite } from "@/types";
 import Link from "next/link";
 
 export async function SiteInfo({ site }: { site: ApiSite }) {
-  const logo = await transformAsset(site.logo);
+  const logo = {
+    src: site.logo.url || "",
+    alt: site.logo.alternativeText || "",
+    width: site.logo.width || 0,
+    height: site.logo.height || 0,
+  };
 
   return (
     <div className="flex flex-col text-muted-foreground items-start justify-center gap-6">

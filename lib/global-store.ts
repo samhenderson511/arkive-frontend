@@ -1,4 +1,5 @@
-import { ApiCart } from "@/types";
+"use client";
+
 import { create } from "zustand";
 
 export interface GlobalState {
@@ -8,8 +9,6 @@ export interface GlobalState {
   setOpenSearch: (open: boolean) => void;
   openMenu: boolean;
   setOpenMenu: (open: boolean) => void;
-  cart: ApiCart | null;
-  setCart: (cart: ApiCart) => void;
 }
 
 export const useGlobal = create<GlobalState>((set) => ({
@@ -19,7 +18,4 @@ export const useGlobal = create<GlobalState>((set) => ({
   setOpenSearch: (open: boolean) => set({ openSearch: open }),
   openMenu: false,
   setOpenMenu: (open: boolean) => set({ openMenu: open }),
-
-  cart: null,
-  setCart: (cart: ApiCart) => set({ cart }),
 }));

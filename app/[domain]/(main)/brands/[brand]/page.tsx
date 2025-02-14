@@ -1,67 +1,104 @@
-import { FilteredProductLayout } from "@/components/ui";
-import { strapiFetch } from "@/lib/api";
-import { getCategoryBrands } from "@/lib/data/getCategoryBrands";
-import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
-import { getCategoryProducts } from "@/lib/data/getCategoryProducts";
-import { getRegion } from "@/lib/data/getRegion";
-import { toTitleCase } from "@/lib/util";
+import { SearchContext } from "@/components";
+import { getMarginClassNames } from "@/components/block-render";
+import { BannerBlock } from "@/components/block-render/banner-block";
+import { Transition } from "@/components/layout/transition";
+import { DefaultResults } from "@/components/search/default-results";
+import { getSite, strapiQuery } from "@/lib/server";
+import { ApiBrand } from "@/types";
 import { notFound } from "next/navigation";
-import slugify from "slugify";
-import { BrandPageProps } from "types/global";
-import { BannerBrand } from "types/strapi";
 
-export { generateMetadata } from "./metadata";
+export async function generateStaticParams({ params: { domain } }: { params: { domain: string } }) {
+  const site = await getSite(domain, {});
 
-export async function generateStaticParams({ params }: BrandPageProps) {
-  const { handle } = await getCategoryFromDomain(params.domain);
-  const brands = await getCategoryBrands(handle);
+  if (!site) {
+    return [];
+  }
 
-  const newParams = brands.map((brand) => ({
-    domain: params.domain,
-    brand: slugify(brand.attributes?.BrandBanner?.Title, {
-      lower: true,
-    }),
+  const { data: brands } = await strapiQuery<ApiBrand[]>({
+    path: "brands",
+    options: {
+      populate: { logo: true, banner: { populate: { background: true } } },
+      filters: {
+        products: {
+          categories: {
+            documentId: {
+              $in: site.category.documentId,
+            },
+          },
+          variants: {
+            stock: {
+              $gt: 0,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const params = brands.map((brand) => ({
+    domain: site.domain,
+    brand: brand.name.toLowerCase(),
   }));
 
-  return newParams || [];
+  return params || [];
 }
 
-export default async function Brand(props: BrandPageProps) {
-  const params = await props.params;
-  const { brand: slugifiedBrand, domain, countryCode } = params;
-  const brand = slugifiedBrand.replaceAll("-", " ");
-  const region = await getRegion(countryCode);
+export default async function Brand({
+  params,
+}: {
+  params: Promise<{ domain: string; brand: string }>;
+}) {
+  const { domain, brand: brandParam } = await params;
 
-  const { handle, tab } = await getCategoryFromDomain(domain);
-  const categoryBrand: BannerBrand[] = await strapiFetch({
-    endpoint: "banner-brands",
-    params: { "filters[BrandBanner][Title][$eqi]": brand },
-    depth: 4,
+  const site = await getSite(domain, {
+    populate: { category: true },
   });
-  const page = categoryBrand?.[0]?.attributes;
 
-  if (!page) return notFound();
+  if (!site) {
+    return notFound();
+  }
 
-  const tag = categoryBrand?.[0]?.attributes?.BrandBanner?.Title;
+  const { banner, logo, ...brand } = await strapiQuery<ApiBrand[]>({
+    path: "brands",
+    options: {
+      populate: { logo: true, banner: { populate: { background: true } } },
+      filters: {
+        name: { $eqi: decodeURIComponent(brandParam) },
+      },
+    },
+  }).then((res) => res.data?.[0]);
 
-  const products = await getCategoryProducts({
-    categoryHandle: handle,
-    region,
-    limit: 100,
-    tags: [tag.toUpperCase(), tag.toLowerCase(), toTitleCase(tag)],
-  });
+  if (!brand) {
+    return notFound();
+  }
+
+  const hasBanner = banner?.title || banner?.background;
 
   return (
-    <FilteredProductLayout
-      logo={page.Logo.data}
-      region={region}
-      showLogo
-      page={page?.BrandBanner}
-      category={tab}
-      products={products}
-      filterData={products}
-    />
+    <>
+      {hasBanner && (
+        <Transition transitionName="fadeInUp">
+          <BannerBlock {...banner} logo={logo} />
+        </Transition>
+      )}
+
+      <SearchContext
+        indexName={"arkive:products"}
+        configure={{
+          hitsPerPage: 36,
+          filters: `brand:=:"${brand.name}"`,
+        }}
+      >
+        <Transition waitForInView transitionName="fadeInUp">
+          <DefaultResults
+            rootPath={site.category.name}
+            className={getMarginClassNames({
+              topMargin: hasBanner ? "Less" : "More",
+              bottomMargin: "Default",
+            })}
+          />
+        </Transition>
+      </SearchContext>
+    </>
   );
 }
-
-export const dynamicParams = true;

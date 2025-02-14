@@ -16,9 +16,9 @@ export function BlocksRenderer({
     <StrapiBlocksRenderer
       content={content}
       blocks={{
-        heading: ({ level }) => (
+        heading: ({ level, children }) => (
           <Text className={className} element={`h${level}`}>
-            Heading
+            {children}
           </Text>
         ),
         paragraph: ({ children }) => (

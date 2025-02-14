@@ -3,8 +3,9 @@ import { DynamicZone, Media } from "./built-ins";
 import {
   RepeatableAddress,
   RepeatableAnnouncement,
+  RepeatableCartLineItem,
   RepeatableColourImage,
-  RepeatableLineItem,
+  RepeatableOrderLineItem,
   RepeatableShipment,
   SingleSeo,
   UiBanner,
@@ -169,8 +170,7 @@ export interface ApiSeo extends ApiRoute {
 }
 
 export interface ApiCart extends ApiRoute {
-  items: RepeatableLineItem[];
-  order: ApiOrder;
+  lineItems: RepeatableCartLineItem[];
   user: ApiUser;
 }
 
@@ -200,7 +200,7 @@ export interface ApiGiftCard extends ApiRoute {
 
 export interface ApiOrder extends ApiRoute {
   billingAddress: RepeatableAddress;
-  cart: ApiCart;
+  lineItems: RepeatableOrderLineItem[];
   discountCode: ApiDiscountCode;
   discounts: number;
   email: string;
@@ -241,7 +241,7 @@ export interface ApiShippingMethod extends ApiRoute {
 export interface ApiReturn extends ApiRoute {
   createdAt: Date;
   createdBy: ApiUser;
-  items: RepeatableLineItem[];
+  lineItems: RepeatableOrderLineItem[];
   locale: string;
   localizations: ApiReturn[];
   order: ApiOrder;

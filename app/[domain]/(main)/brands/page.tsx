@@ -1,71 +1,66 @@
-import { Tile } from "@/components/common/tile";
-import { Logo, TitleBar } from "@/components/ui";
-import { getCategoryBrands } from "@/lib/data/getCategoryBrands";
-import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
-import { getRegion } from "@/lib/data/getRegion";
+import { getMarginClassNames } from "@/components/block-render";
+import { BannerBlock } from "@/components/block-render/banner-block";
+import { GridTilesBlock } from "@/components/block-render/grid-tiles-block";
+import { Transition } from "@/components/layout/transition";
+import { getSite, strapiQuery } from "@/lib/server";
+import { ApiBrand } from "@/types";
 import { notFound } from "next/navigation";
 import slugify from "slugify";
-import { StoreTabPageProps } from "types/global";
-import { BannerBrand } from "types/strapi";
 
-export { generateMetadata } from "./metadata";
+export default async function Brands({ params }: { params: Promise<{ domain: string }> }) {
+  const { domain } = await params;
 
-async function Brands(props: StoreTabPageProps) {
-  const params = await props.params;
-  const { domain, countryCode } = params;
-  const { tab, handle } = await getCategoryFromDomain(domain, 4);
-  const region = await getRegion(countryCode);
-  const brands: BannerBrand[] = await getCategoryBrands(handle);
+  const site = await getSite(decodeURIComponent(domain), {
+    populate: { brandsBanner: { populate: { background: true } }, category: true },
+  });
 
-  if (!brands) {
+  if (!site) {
     return notFound();
   }
 
-  const { Title, Background, Description } = tab.BrandsPageBanner;
+  const { data: brands } = await strapiQuery<ApiBrand[]>({
+    path: "brands",
+    options: {
+      populate: { logo: true, banner: { populate: { background: true } } },
+      filters: {
+        products: {
+          categories: {
+            documentId: {
+              $in: site.category.documentId,
+            },
+          },
+          variants: {
+            stock: {
+              $gt: 0,
+            },
+          },
+        },
+      },
+    },
+  });
 
   return (
-    <div className={"flex flex-col items-center justify-center gap-1.5 lg:gap-8"}>
-      <TitleBar
-        background={Background.data?.[0]}
-        description={Description}
-        title={Title}
-        logo={tab.Logo.data}
-      />
-      <div className={"px-1.5 lg:px-8 w-full flex justify-center"}>
-        <div className={"grid grid-cols-1 lg:grid-cols-2 gap-1.5 lg:gap-3 max-w-screen-2xl w-full"}>
-          {brands
-            .sort((a, b) =>
-              a.attributes.BrandBanner.Title.localeCompare(b.attributes.BrandBanner.Title)
-            )
-            .map((brand) => {
-              const {
-                Logo: logo,
-                BrandBanner: { Title, Background },
-              } = brand.attributes;
+    <>
+      {(site.brandsBanner?.title || site.brandsBanner?.background) && (
+        <Transition transitionName="fadeInUp">
+          <BannerBlock {...site.brandsBanner} />
+        </Transition>
+      )}
 
-              return (
-                <Tile
-                  title={Title}
-                  logo={logo.data}
-                  href={`/brands/${slugify(Title, {
-                    lower: true,
-                  })}`}
-                  image={Background.data?.[0]}
-                  className={"h-64"}
-                  heading={
-                    <>
-                      <Logo className={"!max-w-[12rem]"} logo={logo.data} />
-                      {Title}
-                    </>
-                  }
-                  sizes={"(min-width: 768px) 50vw, 100vw"}
-                />
-              );
-            })}
-        </div>
-      </div>
-    </div>
+      <Transition transitionName="fadeInUp" waitForInView>
+        <GridTilesBlock
+          className={getMarginClassNames({
+            bottomMargin: "None",
+            topMargin: "None",
+          })}
+          tiles={brands.map((brand) => ({
+            title: brand.name,
+            url: `/brands/${slugify(brand.name, { lower: true })}`,
+            logo: brand.logo,
+            background: brand.banner?.background,
+          }))}
+        />
+      </Transition>
+    </>
   );
 }
-
-export default Brands;

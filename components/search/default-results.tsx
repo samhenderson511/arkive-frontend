@@ -2,27 +2,26 @@
 
 import { ProductSearchResult } from "@/types";
 import { IconX } from "@tabler/icons-react";
-import dynamic from "next/dynamic";
-import { useRef } from "react";
+import clsx from "clsx";
+import { HTMLAttributes, useRef } from "react";
 import {
   useCurrentRefinements,
   useHits,
   useInstantSearch,
   usePagination,
 } from "react-instantsearch";
+import { Breadcrumbs } from "../ui/breadcrumbs";
 import { Button } from "../ui/button";
 import { Pagination } from "../ui/pagination";
 import { Text } from "../ui/text";
+import { DefaultHit } from "./default-hit";
 import { DefaultHitSkeleton } from "./default-hit-skeleton";
 import { Filters, FiltersProps } from "./filters";
 import { SortBy } from "./sort-by";
 
-const DefaultHit = dynamic(() => import("./default-hit"), {
-  ssr: false,
-  loading: () => <DefaultHitSkeleton />,
-});
+export type DefaultResultsProps = FiltersProps & HTMLAttributes<HTMLDivElement>;
 
-export function DefaultResults({ rootPath }: FiltersProps) {
+export function DefaultResults({ rootPath, className, ...props }: DefaultResultsProps) {
   const { items, results } = useHits<ProductSearchResult>();
   const { status } = useInstantSearch();
   const { refine: setPage, currentRefinement: page, nbPages, canRefine } = usePagination();
@@ -31,18 +30,34 @@ export function DefaultResults({ rootPath }: FiltersProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const emptyState = (
-    <Text element="p" className="text-center py-8 w-full flex items-center justify-center">
+    <Text
+      element="h3"
+      className="text-center col-span-full py-8 w-full flex items-center justify-center"
+    >
       No results found
     </Text>
   );
 
   return (
-    <div className="flex justify-center w-full px-4 lg:px-8">
-      <div className="flex gap-8 w-full max-w-screen-2xl">
+    <div
+      className={clsx("flex flex-col items-center gap-8 w-full px-4 lg:px-8", className)}
+      {...props}
+    >
+      <Breadcrumbs className={`w-full justify-start max-w-screen-2xl`} />
+
+      <div className="flex gap-8 w-full max-w-screen-2xl items-start">
         <Filters rootPath={rootPath} />
 
-        <div className="grid grow gap-8 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" ref={sectionRef}>
-          <div className="col-span-full flex justify-between items-center">
+        <div
+          className="grid grow gap-8 place-content-center grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          ref={sectionRef}
+        >
+          <div
+            className={clsx(
+              "col-span-full flex justify-between items-center",
+              !results?.nbHits && "hidden"
+            )}
+          >
             <Text element="h4" className="!text-sm my-3 text-muted-foreground">
               {results?.nbHits} results
             </Text>
@@ -103,7 +118,7 @@ export function DefaultResults({ rootPath }: FiltersProps) {
           )}
 
           {!status || status === "loading" ?
-            Array.from({ length: 10 }).map((_, i) => <DefaultHitSkeleton key={i} />)
+            Array.from({ length: 36 }).map((_, i) => <DefaultHitSkeleton key={i} />)
           : !items?.length && status === "idle" ?
             emptyState
           : items.map((hit) => <DefaultHit key={hit.objectID} hit={hit} />)}
@@ -112,10 +127,11 @@ export function DefaultResults({ rootPath }: FiltersProps) {
             <div className="col-span-full flex justify-center items-center">
               <Pagination
                 variant="numbers"
-                totalPages={nbPages - 1}
+                totalPages={nbPages}
                 scrollTargetRef={sectionRef}
-                currentPage={page || 1}
-                onPageChange={setPage}
+                // ... how does this work?
+                currentPage={page + 1 || 1}
+                onPageChange={(page) => setPage(page - 1)}
               />
             </div>
           )}

@@ -1,93 +1,136 @@
-import { FilteredProductLayout } from "@/components/ui";
-import { strapiFetch } from "@/lib/api";
-import { getCategoryFromDomain } from "@/lib/data/getCategoryFromDomain";
-import { getCategoryProducts } from "@/lib/data/getCategoryProducts";
-import { getCategoryTitle } from "@/lib/data/getCategoryTitle";
-import { getDepartments } from "@/lib/data/getDepartments";
-import { getRegion } from "@/lib/data/getRegion";
+import { getMarginClassNames } from "@/components/block-render";
+import { BannerBlock } from "@/components/block-render/banner-block";
+import { Transition } from "@/components/layout/transition";
+import { DefaultResults } from "@/components/search/default-results";
+import { SearchContext } from "@/components/search/search-context";
+import { getSite, strapiQuery } from "@/lib/server";
+import { ApiCategory } from "@/types";
 import { notFound } from "next/navigation";
-import { StoreTabPageProps, SubDepartmentPageProps } from "types/global";
-import { BannerCategory } from "types/strapi";
 
-export { generateMetadata } from "./metadata";
-
-export async function generateStaticParams({ params }: StoreTabPageProps) {
-  const { handle } = await getCategoryFromDomain(params.domain);
-  const departments = await getDepartments(handle);
-
-  const newParams = departments?.flatMap((dep) =>
-    dep.category_children.map((subDep) => ({
-      domain: params.domain,
-      department: dep.name,
-      subDepartment: subDep.name,
-    }))
-  );
-
-  return newParams || [];
-}
-
-export default async function Department(props: SubDepartmentPageProps) {
-  const params = await props.params;
-  const { domain, department, subDepartment, countryCode } = params;
-  const { tab, handleAsParam } = await getCategoryFromDomain(domain);
-  const region = await getRegion(countryCode);
-
-  const handle = `/${handleAsParam}/${department}/${subDepartment}`.toUpperCase();
-
-  const page: BannerCategory[] =
-    (await strapiFetch({
-      endpoint: "banner-categories",
-      params: { "filters[Handle][$eq]": handle },
-      depth: 3,
-    })) || [];
-
-  if (!page?.[0]?.attributes?.CategoryBanner?.Title) {
-    const title = await getCategoryTitle(handle);
-
-    if (!title) return notFound();
-
-    page.push({
-      attributes: {
-        CategoryBanner: {
-          Title: title,
-        },
+export async function generateStaticParams({ params: { domain } }: { params: { domain: string } }) {
+  const site = await getSite(domain, {
+    populate: {
+      category: {
+        populate: { children: true },
       },
-    });
+    },
+  });
+
+  if (!site) {
+    return [];
   }
 
-  const filterData = await getCategoryProducts({
-    categoryHandle: handle,
-    region,
-    productOptions: {
-      select: ["id", "handle", "metadata"],
-      relations: [],
+  const { data: departments } = await strapiQuery<ApiCategory[]>({
+    path: "categories",
+    options: {
+      populate: { children: true },
+      filters: {
+        parent: {
+          documentId: { $eq: site.category?.documentId },
+        },
+        products: {
+          variants: {
+            stock: { $gt: 0 },
+          },
+        },
+      },
     },
-    variantOptions: {
-      fields: "id,product_id,metadata",
-      expand: "prices",
-    },
-    limit: 1000,
   });
 
-  const products = await getCategoryProducts({
-    categoryHandle: handle,
-    region,
-    limit: 100,
+  const { data: subDepartments } = await strapiQuery<ApiCategory[]>({
+    path: "categories",
+    options: {
+      populate: { parent: true },
+      filters: {
+        parent: { documentId: { $in: departments?.map(({ documentId }) => documentId) } },
+        products: {
+          variants: {
+            stock: {
+              $gt: 0,
+            },
+          },
+        },
+      },
+    },
   });
 
-  if (!products?.length) {
+  const params = subDepartments?.map(({ parent, name }) => ({
+    domain: site.domain,
+    department: parent.name.toLowerCase(),
+    subDepartment: name.toLowerCase(),
+  }));
+
+  return params || [];
+}
+
+export default async function SubDepartment({
+  params,
+}: {
+  params: Promise<{ domain: string; department: string; subDepartment: string }>;
+}) {
+  const { domain, department: departmentParam, subDepartment: subDepartmentParam } = await params;
+
+  const site = await getSite(domain, {
+    populate: { category: true },
+  });
+
+  if (!site) {
     return notFound();
   }
 
+  const department = await strapiQuery<ApiCategory[]>({
+    path: "categories",
+    options: {
+      filters: {
+        name: { $eqi: decodeURIComponent(departmentParam) },
+        parent: { name: { $eqi: site.category?.name } },
+      },
+    },
+  }).then((res) => res.data?.[0]);
+
+  if (!department) {
+    return notFound();
+  }
+
+  const { banner, ...subDepartment } = await strapiQuery<ApiCategory[]>({
+    path: "categories",
+    options: {
+      populate: { parent: true, banner: { populate: { background: true } } },
+      filters: {
+        name: { $eqi: decodeURIComponent(subDepartmentParam) },
+        parent: { name: { $eqi: department.name } },
+      },
+    },
+  }).then((res) => res.data?.[0]);
+
+  const subDepartmentPath = `${site.category.name} > ${department.name} > ${subDepartment.name}`;
+  const hasBanner = banner?.title || banner?.background;
+
   return (
-    <FilteredProductLayout
-      region={region}
-      page={page?.[0]?.attributes?.CategoryBanner || { Title: "" }}
-      category={tab}
-      products={products}
-      filterData={filterData}
-    />
+    <>
+      {hasBanner && (
+        <Transition transitionName="fadeInUp">
+          <BannerBlock {...banner} />
+        </Transition>
+      )}
+
+      <SearchContext
+        indexName={"arkive:products"}
+        configure={{
+          hitsPerPage: 36,
+          filters: `categories.subDept:=:"${subDepartmentPath}"`,
+        }}
+      >
+        <Transition waitForInView transitionName="fadeInUp">
+          <DefaultResults
+            rootPath={site.category.name}
+            className={getMarginClassNames({
+              topMargin: hasBanner ? "Less" : "More",
+              bottomMargin: "Default",
+            })}
+          />
+        </Transition>
+      </SearchContext>
+    </>
   );
 }
-
-export const maxDuration = 60;

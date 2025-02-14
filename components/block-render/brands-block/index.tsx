@@ -1,4 +1,3 @@
-import { transformAsset } from "@/lib/server";
 import { strapiQuery } from "@/lib/strapi-query";
 import { ApiBrand, ApiSite, UiBrands } from "@/types";
 import { BrandsClient } from "./client";
@@ -19,6 +18,11 @@ export async function BrandsBlock({
               $in: site.category.documentId,
             },
           },
+          variants: {
+            stock: {
+              $gt: 0,
+            },
+          },
         },
       },
     },
@@ -27,7 +31,12 @@ export async function BrandsBlock({
       await Promise.all(
         res.data?.map(async (brand) => ({
           name: brand.name,
-          logo: await transformAsset(brand.logo),
+          logo: {
+            src: brand.logo.url,
+            alt: brand.name,
+            width: brand.logo.width,
+            height: brand.logo.height,
+          },
         }))
       )
   );

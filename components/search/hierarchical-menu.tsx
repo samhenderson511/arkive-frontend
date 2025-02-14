@@ -11,20 +11,18 @@ export function HierarchicalMenu({
   refine,
   className,
 }: Partial<ReturnType<typeof useHierarchicalMenu>> & { className?: string }) {
-  if (!items || !refine) return null;
-
   return (
     <ul className={clsx("flex flex-col gap-1", className)}>
       {items?.map((item) => (
         <li key={item.value} className="flex flex-col gap-1">
           <Label
-            onClick={() => refine(item.value)}
+            onClick={() => refine?.(item.value)}
             className="flex text-muted-foreground items-center gap-3"
           >
             <Text element="span" className={clsx("grow capitalize", item.isRefined && "font-bold")}>
               {item.label.toLowerCase()}
             </Text>
-            <Badge className="text-muted-foreground" variant="secondary">
+            <Badge className="text-muted-foreground" variant="outline">
               {item.count}
             </Badge>
           </Label>

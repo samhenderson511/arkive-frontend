@@ -3,9 +3,9 @@ import { ApiBrand, ApiCategory, ApiColour, ApiProductVariant } from "./apis";
 import { Media } from "./built-ins";
 
 export interface RepeatableGridTile {
-  background: Media;
-  title: string;
-  url: string;
+  background?: Media;
+  title?: string;
+  url?: string;
 }
 
 export interface UiGridTiles {
@@ -19,13 +19,13 @@ export interface RepeatableAnnouncement {
 }
 
 export interface SingleDesign {
-  bottomMargin: "None" | "Less" | "Default" | "More";
-  topMargin: "None" | "Less" | "Default" | "More";
+  bottomMargin?: "None" | "Less" | "Default" | "More";
+  topMargin?: "None" | "Less" | "Default" | "More";
 }
 
 export interface UiButton {
   children: string;
-  design: SingleDesign;
+  design?: SingleDesign;
   href: string;
   size: "Large" | "Default" | "Small";
   variant: "Primary" | "Secondary" | "Outline" | "Ghost" | "Link";
@@ -58,10 +58,15 @@ export interface SingleSeo {
   title?: string;
 }
 
-export interface RepeatableLineItem {
+export interface RepeatableOrderLineItem {
   productVariant: ApiProductVariant;
   quantity: number;
   total: number;
+}
+
+export interface RepeatableCartLineItem {
+  productVariant: ApiProductVariant;
+  quantity: number;
 }
 
 export interface RepeatableAddress {
@@ -85,15 +90,9 @@ export interface UiCard {
 
 export interface RepeatableShipment {
   createShippingLabel: boolean;
-  lineItems: RepeatableLineItem[];
+  lineItems: RepeatableCartLineItem[];
   trackingNumber: string;
   trackingUrl: string;
-}
-
-export interface RepeatableGridTile {
-  background: Media;
-  title: string;
-  url: string;
 }
 
 export interface UiGridTiles {

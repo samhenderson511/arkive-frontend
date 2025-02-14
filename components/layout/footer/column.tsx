@@ -8,7 +8,9 @@ interface Props {
 
 export const Column = ({ title, items }: Props) => (
   <div className={"flex flex-col gap-4"}>
-    <Text element="h4">{title}</Text>
+    <Text element="h4" className="font-semibold">
+      {title}
+    </Text>
 
     <nav>
       <ul className={"flex flex-col"}>

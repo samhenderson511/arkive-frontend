@@ -15,7 +15,8 @@ export async function ProductCarouselBlock({
   onSaleOnly,
   className,
   site,
-}: UiProductCarousel & { className?: string; site: ApiSite }) {
+  ignoredProducts,
+}: UiProductCarousel & { className?: string; site: ApiSite; ignoredProducts?: ApiProduct[] }) {
   const { data: products } = await strapiQuery<ApiProduct[]>({
     path: "products",
     options: {
@@ -33,11 +34,14 @@ export async function ProductCarouselBlock({
         },
       },
       filters: {
-        ...(brands && { brands: { documentId: { $in: brands.map((brand) => brand.documentId) } } }),
+        ...(brands && { brand: { documentId: { $in: brands.map((brand) => brand.documentId) } } }),
         ...(onSaleOnly && { applicableSales: { $null: false } }),
+        ...(ignoredProducts && {
+          documentId: { $not: { $in: ignoredProducts.map((product) => product.documentId) } },
+        }),
         categories: {
           documentId: {
-            $in: [site.category.name, ...categories?.map((category) => category.documentId)],
+            $in: [site.category.documentId, ...categories?.map((category) => category.documentId)],
           },
         },
         variants: {
@@ -58,7 +62,7 @@ export async function ProductCarouselBlock({
     <div className={clsx("flex flex-col items-center w-full gap-6 p-1.5 px-4 lg:px-8", className)}>
       <div className="max-w-screen-2xl w-full xl:bg-background flex flex-col gap-8">
         <div className="flex flex-col gap-2 sm:flex-row  justify-between items-baseline">
-          <Text element="h2" className="border-none">
+          <Text element="h2" elementStyle="h3">
             {title}
           </Text>
 

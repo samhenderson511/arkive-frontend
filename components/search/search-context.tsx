@@ -1,5 +1,6 @@
 "use client";
 
+import { ComponentProps } from "react";
 import { Configure, ConfigureProps } from "react-instantsearch";
 import { InstantSearchNext } from "react-instantsearch-nextjs";
 import TypesenseInstantSearchAdapter from "typesense-instantsearch-adapter";
@@ -12,11 +13,13 @@ export function SearchContext({
   indexName,
   routing = true,
   configure,
+  initialUiState,
 }: {
   children: React.ReactNode;
   indexName: string;
   routing?: boolean;
   configure: ConfigureProps;
+  initialUiState?: ComponentProps<typeof InstantSearchNext>["initialUiState"];
 }) {
   if (!url) throw new Error("NEXT_PUBLIC_TYPESENSE_URL is not set");
   if (!orgId) throw new Error("NEXT_PUBLIC_TYPESENSE_API_KEY is not set");
@@ -44,8 +47,31 @@ export function SearchContext({
     <InstantSearchNext
       searchClient={typesense.searchClient}
       indexName={indexName}
-      routing={routing}
-      future={{ preserveSharedStateOnUnmount: true }}
+      initialUiState={initialUiState}
+      routing={{
+        stateMapping: {
+          stateToRoute(uiState) {
+            const {
+              [indexName]: { configure: _, ...indexState },
+              ...rest
+            } = uiState;
+
+            return {
+              ...rest,
+              ...indexState,
+            };
+          },
+          routeToState(routeState) {
+            return {
+              [indexName]: {
+                ...routeState,
+              },
+            };
+          },
+        },
+        ...(typeof routing === "boolean" ? { enabled: routing } : routing),
+      }}
+      future={{ preserveSharedStateOnUnmount: false }}
     >
       <Configure {...configure} />
 

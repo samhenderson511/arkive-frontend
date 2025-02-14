@@ -1,7 +1,6 @@
 import { unstable_cache } from "next/cache";
 import pluralize from "pluralize";
 import QueryString from "qs";
-import { IS_DEVELOPMENT } from "./environment";
 
 /**
  * Represents the structure of a Strapi API response.
@@ -350,6 +349,8 @@ export async function strapiQuery<T>({
           [path, query],
           {
             tags: [
+              ...tags,
+              path,
               pluralize(path),
               pluralize(path, 1),
               ...(tags?.map((tag) => pluralize(tag)) || []),
@@ -361,7 +362,7 @@ export async function strapiQuery<T>({
           res.json()
         )) as StrapiResponse<T>);
 
-    if (IS_DEVELOPMENT) {
+    if (process.env.VERBOSE_FETCH_LOGGING) {
       const dataSize = (JSON.stringify(json).length / 1024).toFixed(1);
 
       const getColor = (size: string) => {

@@ -67,7 +67,7 @@ function Carousel({
   }
 
   return (
-    <div id={id} className={cn("flex flex-col z-[1] relative w-full items-center", className)}>
+    <div id={id} className={cn("flex z-[1] flex-col w-full justify-center", className)}>
       <CarouselRoot
         opts={{
           loop: true,
@@ -294,7 +294,7 @@ const CarouselContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HT
     const { carouselRef, orientation } = useCarousel();
 
     return (
-      <div ref={carouselRef} className="overflow-hidden">
+      <div ref={carouselRef} className="overflow-hidden w-full h-full">
         <div
           ref={ref}
           className={cn(
@@ -395,5 +395,6 @@ export {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  CarouselRoot,
   type CarouselApi,
 };

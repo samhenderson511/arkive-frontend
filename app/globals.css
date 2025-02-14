@@ -61,4 +61,10 @@
     --info: 240 21% 17%;
     --info-foreground: 240 88% 89%;
   }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }

@@ -1,16 +1,9 @@
 "use client";
 
-import { DefaultHitSkeleton } from "@/components/search/default-hit-skeleton";
+import { DefaultHit } from "@/components/search/default-hit";
 import { Carousel } from "@/components/ui/carousel";
 import { formatProduct } from "@/lib/util/format-product";
 import { ApiProduct } from "@/types";
-import dynamic from "next/dynamic";
-
-// use a dynamic import to avoid the image throwing a hydration error, as when it comes from typesense it will need to be rendered on the client
-export const DefaultHit = dynamic(() => import("../../search/default-hit"), {
-  ssr: false,
-  loading: () => <DefaultHitSkeleton />,
-});
 
 export function ProductCarouselBlockClient({
   products,

@@ -11,11 +11,27 @@ import {
   SheetTitle,
 } from "@/components";
 import { useGlobal } from "@/lib";
+import { useCart } from "@/lib/hooks";
+import { GBP } from "@/lib/server";
+import { getVariantPrice } from "@/lib/util/format-product";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import Image from "next/image";
+import { useMemo } from "react";
+import { CartItem } from "./cart-item";
 
 export function CartSheet() {
-  const { openCart, setOpenCart, cart } = useGlobal();
+  const { openCart, setOpenCart } = useGlobal();
+  const { cart } = useCart();
+
+  const total =
+    useMemo(() => {
+      return cart?.lineItems?.reduce((acc, item) => {
+        const { salePrice } = getVariantPrice(item.productVariant);
+        return acc + salePrice * item.quantity;
+      }, 0);
+    }, [cart]) || 0;
+
+  if (!cart) return null;
 
   return (
     <Sheet open={openCart} onOpenChange={setOpenCart}>
@@ -27,7 +43,7 @@ export function CartSheet() {
           </VisuallyHidden>
         </SheetHeader>
 
-        {!cart?.items?.length ?
+        {!cart?.lineItems?.length ?
           <>
             <div className={"grow w-full relative flex items-center"}>
               <Image
@@ -48,32 +64,49 @@ export function CartSheet() {
           </>
         : <div className={"flex flex-col flex-1 justify-between"}>
             <div className="flex flex-col overflow-y-scroll gap-2">
-              {Boolean(cart.items?.length) && cart.items?.map((item) => item.productVariant.name)}
+              {Boolean(cart.lineItems?.length) &&
+                cart.lineItems?.map((item) => (
+                  <CartItem
+                    key={item.productVariant.documentId}
+                    variant={item.productVariant}
+                    quantity={item.quantity}
+                  />
+                ))}
             </div>
+
             <SheetFooter className="flex !flex-col gap-x-0 gap-y-3">
               <div className="flex items-baseline justify-between">
                 <span className="font-semibold">
                   Subtotal <span className="font-normal">(incl. taxes)</span>
                 </span>
-                <span className="text-lg font-bold">
-                  {cart.items?.reduce((acc, item) => acc + item.total, 0)}
-                </span>
+                <span className="text-lg font-bold">{GBP.format(total)}</span>
               </div>
-              <SheetClose asChild>
-                <Button className={"!w-full"} size={"lg"} href={"/checkout?step=address"}>
-                  Checkout Securely
-                </Button>
-              </SheetClose>
-              <SheetClose asChild>
-                <Button variant={"outline"} className={"!w-full"} size={"lg"} href={"/cart"}>
-                  Go to Basket
-                </Button>
-              </SheetClose>
-              <SheetClose asChild>
-                <Button variant={"outline"} className={"!w-full"} size={"lg"}>
-                  Continue Shopping
-                </Button>
-              </SheetClose>
+
+              <Button
+                className={"!w-full"}
+                size={"default"}
+                href={"/checkout"}
+                onClick={() => setOpenCart(false)}
+              >
+                Checkout Securely
+              </Button>
+              <Button
+                variant={"outline"}
+                className={"!w-full"}
+                size={"default"}
+                href={"/cart"}
+                onClick={() => setOpenCart(false)}
+              >
+                Go to Basket
+              </Button>
+              <Button
+                variant={"outline"}
+                className={"!w-full"}
+                size={"default"}
+                onClick={() => setOpenCart(false)}
+              >
+                Continue Shopping
+              </Button>
             </SheetFooter>
           </div>
         }
