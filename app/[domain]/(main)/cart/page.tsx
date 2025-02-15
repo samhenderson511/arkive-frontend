@@ -1,23 +1,41 @@
-import CartTemplate from "@/components/cart/templates";
-import { retrieveCart } from "@/lib/data";
-import { enrichLineItems } from "@/lib/data/enrichLineItems";
-import { getRegion } from "@/lib/data/getRegion";
-import { getCustomer } from "@/lib/medusaClient";
-import { Metadata } from "next";
-import { StoreTabPageProps } from "types/global";
+import { ProductCarouselBlock } from "@/components/block-render/product-carousel-block";
+import { CartPage } from "@/components/cart/cart-page";
+import { Transition } from "@/components/layout/transition";
+import { getCart, getSite } from "@/lib/server";
 
-export const metadata: Metadata = {
-  title: "Shopping Bag",
-  description: "View your shopping bag",
-  robots: "noindex",
-};
+export default async function Cart(props: { params: Promise<{ domain: string }> }) {
+  const { domain } = await props.params;
 
-export default async function Cart(props: StoreTabPageProps) {
-  const params = await props.params;
-  const region = await getRegion(params.countryCode);
-  const cart = await retrieveCart();
-  const items = await enrichLineItems(cart?.items || [], region.id);
-  const customer = await getCustomer();
+  const site = await getSite(domain, {
+    populate: {
+      category: true,
+    },
+  });
+  const cart = await getCart();
 
-  return <CartTemplate region={region} cart={cart} customer={customer} cartItems={items} />;
+  return (
+    <>
+      <Transition
+        transitionName="fadeInUp"
+        className="flex justify-center w-full px-4 lg:px-8 pt-8 lg:pt-16"
+      >
+        <CartPage />
+      </Transition>
+
+      <Transition transitionName="fadeInUp" waitForInView>
+        <ProductCarouselBlock
+          onSaleOnly={false}
+          rows={1}
+          title="You may also like"
+          categories={
+            cart?.lineItems
+              .flatMap((item) => item.productVariant.product.categories)
+              .map((cat) => cat) ?? []
+          }
+          limit={15}
+          site={site}
+        />
+      </Transition>
+    </>
+  );
 }

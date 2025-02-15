@@ -1,6 +1,8 @@
 "use client";
 
 import { transformAssetClient, useGlobal } from "@/lib";
+import { updateCart } from "@/lib/data";
+import { useCart } from "@/lib/hooks";
 import { GBP, toTitleCase } from "@/lib/server";
 import { constructSlug } from "@/lib/util/construct-slug";
 import { constructHierarchy, getVariantPrice } from "@/lib/util/format-product";
@@ -11,9 +13,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
+import { toast } from "../ui/toast/use-toast";
 
 export function CartItem({ variant, quantity }: { variant: ApiProductVariant; quantity: number }) {
   const { setOpenCart } = useGlobal();
+  const { setCart } = useCart();
   const productImages = variant.product.images;
 
   const variantImage =
@@ -31,6 +35,20 @@ export function CartItem({ variant, quantity }: { variant: ApiProductVariant; qu
   const categories = constructHierarchy(rootCategory, variant.product);
   const slug = constructSlug(categories.subDept, variant.product.name);
   const { salePrice, price } = getVariantPrice(variant);
+
+  const updateQuantity = async (newQuantity: number) => {
+    await updateCart({ variantId: variant.documentId, quantity: newQuantity })
+      .then((res) => {
+        setCart(res);
+      })
+      .catch((error) => {
+        toast({
+          title: "Error updating cart",
+          description: error.message,
+          variant: "destructive",
+        });
+      });
+  };
 
   return (
     <div className="flex w-full items-start justify-start gap-3 my-1">
@@ -75,18 +93,38 @@ export function CartItem({ variant, quantity }: { variant: ApiProductVariant; qu
 
         <div className="flex gap-3 items-center justify-between mt-3 border-t border-border">
           <div className="flex gap-4 items-center">
-            <Button variant="link" size="sm" className="p-1">
+            <Button
+              variant="link"
+              size="sm"
+              className="p-1"
+              onClick={() => updateQuantity(quantity - 1)}
+              title="Remove one item"
+            >
               <IconMinus className="size-4" />
             </Button>
+
             <Text element="span" className="font-medium text-muted-foreground leading-none">
               {quantity}
             </Text>
-            <Button variant="link" size="sm" className="p-1">
+
+            <Button
+              variant="link"
+              size="sm"
+              className="p-1"
+              onClick={() => updateQuantity(quantity + 1)}
+              title="Add one item"
+            >
               <IconPlus className="size-4" />
             </Button>
           </div>
 
-          <Button variant="link" size="sm" className="text-destructive p-1 gap-2">
+          <Button
+            variant="link"
+            size="sm"
+            className="text-muted-foreground p-1 gap-2"
+            onClick={() => updateQuantity(0)}
+            title="Remove all items"
+          >
             Remove
             <IconTrash className="size-4" />
           </Button>

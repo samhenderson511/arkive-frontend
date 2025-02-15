@@ -35,7 +35,7 @@ export function CartSheet() {
 
   return (
     <Sheet open={openCart} onOpenChange={setOpenCart}>
-      <SheetContent side="right" className="flex flex-col">
+      <SheetContent side="right" className="flex flex-col overflow-y-auto overflow-x-hidden">
         <SheetHeader>
           <SheetTitle>Basket</SheetTitle>
           <VisuallyHidden>
@@ -63,7 +63,7 @@ export function CartSheet() {
             </SheetFooter>
           </>
         : <div className={"flex flex-col flex-1 justify-between"}>
-            <div className="flex flex-col overflow-y-scroll gap-2">
+            <div className="flex flex-col grow gap-2">
               {Boolean(cart.lineItems?.length) &&
                 cart.lineItems?.map((item) => (
                   <CartItem

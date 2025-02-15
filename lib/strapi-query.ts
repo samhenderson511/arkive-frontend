@@ -323,7 +323,10 @@ export async function strapiQuery<T>({
   fetchOptions?: RequestInit;
   tags?: string[];
 }) {
-  const query = QueryString.stringify(options, { encodeValuesOnly: true });
+  const query = QueryString.stringify(
+    { ...options, status: "published" },
+    { encodeValuesOnly: true }
+  );
   const baseUrl = process.env.STRAPI_BASE_URL;
   const apiToken = process.env.STRAPI_API_TOKEN;
   const url = `${baseUrl}/${path}?${query}`;
@@ -362,7 +365,7 @@ export async function strapiQuery<T>({
           res.json()
         )) as StrapiResponse<T>);
 
-    if (process.env.VERBOSE_FETCH_LOGGING) {
+    if (Boolean(JSON.parse(process.env.VERBOSE_FETCH_LOGGING || "false"))) {
       const dataSize = (JSON.stringify(json).length / 1024).toFixed(1);
 
       const getColor = (size: string) => {

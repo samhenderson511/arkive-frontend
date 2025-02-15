@@ -2,16 +2,25 @@
 
 import { getCart } from "@/lib/server";
 import { ApiCart } from "@/types";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useGlobal } from "../global-store";
+import { useEffect } from "react";
+import { create } from "zustand";
+
+interface CartState {
+  cart: ApiCart | null;
+  setCart: (cart: ApiCart | null) => void;
+}
+
+const useCartState = create<CartState>((set) => ({
+  cart: null,
+  setCart: (cart: ApiCart | null) => set({ cart }),
+}));
 
 export function useCart() {
-  const [cart, setCart] = useState<ApiCart | null>(null);
-  const pathname = usePathname();
-  const { openCart } = useGlobal();
+  const { cart, setCart } = useCartState();
 
   useEffect(() => {
+    if (cart) return;
+
     const fetchCart = async () => {
       const cart = await getCart();
 
@@ -19,7 +28,7 @@ export function useCart() {
     };
 
     fetchCart();
-  }, [openCart, pathname]);
+  }, [cart]);
 
-  return { cart };
+  return { cart, setCart };
 }

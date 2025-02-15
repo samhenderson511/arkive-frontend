@@ -61,6 +61,7 @@ export interface SingleSeo {
 export interface RepeatableOrderLineItem {
   productVariant: ApiProductVariant;
   quantity: number;
+  shipped: boolean;
   total: number;
 }
 
@@ -100,8 +101,8 @@ export interface UiGridTiles {
 }
 
 export interface UiProductCarousel {
-  brands: ApiBrand[];
-  button: UiButton;
+  brands?: ApiBrand[];
+  button?: UiButton;
   categories: ApiCategory[];
   limit: number;
   onSaleOnly: boolean;

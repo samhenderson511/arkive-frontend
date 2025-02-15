@@ -13,6 +13,7 @@
   "author": "Sam Henderson <sam@mvgmedisa.com>",
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
+    "@hookform/resolvers": "^4.1.0",
     "@motionone/utils": "^10.18.0",
     "@paypal/paypal-js": "^8.2.0",
     "@paypal/react-paypal-js": "^8.8.2",
@@ -73,6 +74,7 @@
     "tinycolor2": "^1.6.0",
     "typesense-instantsearch-adapter": "^2.8.0",
     "usehooks-ts": "^3.1.1",
+    "zod": "^3.24.2",
     "zustand": "^5.0.3"
   },
   "devDependencies": {

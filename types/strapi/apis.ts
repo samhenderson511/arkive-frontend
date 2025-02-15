@@ -171,6 +171,9 @@ export interface ApiSeo extends ApiRoute {
 
 export interface ApiCart extends ApiRoute {
   lineItems: RepeatableCartLineItem[];
+  discountCode: ApiDiscountCode;
+  giftCard: ApiGiftCard;
+  shippingMethod: ApiShippingMethod;
   user: ApiUser;
 }
 

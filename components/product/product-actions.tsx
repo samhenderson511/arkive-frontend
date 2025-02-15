@@ -2,6 +2,7 @@
 
 import { useGlobal } from "@/lib";
 import { updateCart } from "@/lib/data";
+import { useCart } from "@/lib/hooks";
 import { ApiProduct, ApiProductVariant } from "@/types";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { useParams, useRouter } from "next/navigation";
@@ -23,6 +24,7 @@ export function ProductActions({
 }) {
   const [quantity, setQuantity] = useState(1);
   const { setOpenCart } = useGlobal();
+  const { cart, setCart } = useCart();
   const params = useParams();
   const router = useRouter();
 
@@ -56,6 +58,29 @@ export function ProductActions({
       push(newVariant.name);
     }
   };
+
+  const itemInCart = cart?.lineItems.find(
+    (item) => item.productVariant?.documentId === variant.documentId
+  );
+  const addToCart = async () =>
+    await updateCart({
+      variantId: variant.documentId,
+      // if the item is already in the cart, add the quantity to the existing quantity
+      quantity: itemInCart ? itemInCart.quantity + quantity : quantity,
+    })
+      .then((res) => {
+        if (res.documentId) {
+          setCart(res);
+          setOpenCart(true);
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: "Error adding item to cart",
+          description: error.message,
+          variant: "destructive",
+        });
+      });
 
   return (
     <>
@@ -161,23 +186,7 @@ export function ProductActions({
           </Button>
         </div>
 
-        <Button
-          size="lg"
-          disabled={variant.stock < quantity}
-          onClick={async () =>
-            await updateCart({ variantId: variant.documentId, quantity }).then((res) => {
-              if (res) {
-                toast({
-                  title: "Error adding item to cart",
-                  description: res,
-                  variant: "destructive",
-                });
-              } else {
-                setOpenCart(true);
-              }
-            })
-          }
-        >
+        <Button size="lg" disabled={variant.stock < quantity} onClick={addToCart}>
           Add to cart
         </Button>
       </div>
