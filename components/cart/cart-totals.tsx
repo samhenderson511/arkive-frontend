@@ -1,34 +1,9 @@
 import { useCart } from "@/lib/hooks";
 import { GBP } from "@/lib/server";
-import { getVariantPrice } from "@/lib/util/format-product";
 import { Text } from "../ui/text";
 
 export function CartTotals() {
-  const { cart } = useCart();
-
-  const tax =
-    cart?.lineItems.reduce(
-      (acc, { productVariant, quantity }) =>
-        acc + getVariantPrice(productVariant).price * quantity * (productVariant.taxRate / 100),
-      0
-    ) ?? 0;
-
-  const subtotal =
-    (cart?.lineItems.reduce(
-      (acc, { productVariant, quantity }) => acc + getVariantPrice(productVariant).price * quantity,
-      0
-    ) ?? 0) - tax;
-
-  const salePriceSubtotal =
-    cart?.lineItems.reduce(
-      (acc, { productVariant, quantity }) =>
-        acc + getVariantPrice(productVariant).salePrice * quantity,
-      0
-    ) ?? 0;
-
-  const discounts = subtotal - salePriceSubtotal;
-
-  const total = subtotal - discounts + tax;
+  const { subtotal, tax, discounts, shipping, total } = useCart();
 
   return (
     <div className="flex flex-col gap-4">
@@ -52,7 +27,8 @@ export function CartTotals() {
         </Text>
 
         <Text element="span" className="flex text-muted-foreground leading-tight">
-          <span className="grow">Gift Cards</span>
+          <span className="grow">Shipping</span>
+          <span className="font-semibold">{GBP.format(shipping)}</span>
         </Text>
 
         <Text element="h5" className="flex justify-between">

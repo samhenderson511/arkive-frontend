@@ -59,7 +59,7 @@ export function ProductActions({
     }
   };
 
-  const itemInCart = cart?.lineItems.find(
+  const itemInCart = cart?.lineItems?.find(
     (item) => item.productVariant?.documentId === variant.documentId
   );
   const addToCart = async () =>

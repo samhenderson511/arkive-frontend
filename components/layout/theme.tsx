@@ -52,6 +52,12 @@ export async function Theme({ site, children }: { site: ApiSite; children: React
   const border = tinycolor(site.border);
   const destructive = tinycolor(site.destructive);
   const destructiveForeground = tinycolor(site.destructiveForeground);
+  const success = tinycolor(site.success);
+  const successForeground = tinycolor(site.successForeground);
+  const warning = tinycolor(site.warning);
+  const warningForeground = tinycolor(site.warningForeground);
+  const info = tinycolor(site.info);
+  const infoForeground = tinycolor(site.infoForeground);
 
   const styles = [
     // headingFontVariable &&
@@ -84,6 +90,12 @@ export async function Theme({ site, children }: { site: ApiSite; children: React
     destructive && `--destructive: ${toTailwindString(destructive)};`,
     destructiveForeground &&
       `--destructive-foreground: ${toTailwindString(destructiveForeground)};`,
+    success && `--success: ${toTailwindString(success)};`,
+    successForeground && `--success-foreground: ${toTailwindString(successForeground)};`,
+    warning && `--warning: ${toTailwindString(warning)};`,
+    warningForeground && `--warning-foreground: ${toTailwindString(warningForeground)};`,
+    info && `--info: ${toTailwindString(info)};`,
+    infoForeground && `--info-foreground: ${toTailwindString(infoForeground)};`,
   ].filter(Boolean);
 
   const style = `

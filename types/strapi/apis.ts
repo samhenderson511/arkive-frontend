@@ -67,6 +67,12 @@ export interface ApiSite extends ApiRoute {
   popoverForeground: string;
   primary: string;
   primaryForeground: string;
+  success: string;
+  successForeground: string;
+  warning: string;
+  warningForeground: string;
+  info: string;
+  infoForeground: string;
   radius: number;
   ring: string;
   saleBanner: UiBanner;
@@ -170,11 +176,11 @@ export interface ApiSeo extends ApiRoute {
 }
 
 export interface ApiCart extends ApiRoute {
-  lineItems: RepeatableCartLineItem[];
-  discountCode: ApiDiscountCode;
-  giftCard: ApiGiftCard;
-  shippingMethod: ApiShippingMethod;
-  user: ApiUser;
+  lineItems?: RepeatableCartLineItem[];
+  discountCode?: ApiDiscountCode;
+  giftCard?: ApiGiftCard;
+  shippingMethod?: ApiShippingMethod;
+  user?: ApiUser;
 }
 
 export interface ApiDiscountCode extends ApiRoute {
@@ -184,14 +190,10 @@ export interface ApiDiscountCode extends ApiRoute {
   endDate: Date;
   maximumTotal: number;
   maxRedemptions: number;
-  metadata: JSON;
   minimumTotal: number;
   orders: ApiOrder[];
   percentageOff: number;
   startDate: Date;
-  validCategories: ApiCategory[];
-  validProducts: ApiProduct[];
-  validSeasons: ApiSeason[];
 }
 
 export interface ApiGiftCard extends ApiRoute {

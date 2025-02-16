@@ -12,11 +12,11 @@ export async function updateCart({
   giftCard,
   shippingMethod,
 }: {
-  variantId: string;
-  quantity: number;
-  discountCode?: string;
-  giftCard?: string;
-  shippingMethod?: string;
+  variantId?: string;
+  quantity?: number;
+  discountCode?: string | null;
+  giftCard?: string | null;
+  shippingMethod?: string | null;
 }) {
   const cart = await getCart();
 
@@ -24,20 +24,16 @@ export async function updateCart({
     throw new Error("Missing cart ID");
   }
 
-  if (!variantId) {
-    throw new Error("Missing product variant ID");
-  }
-
   const body = JSON.stringify({
     data: {
       lineItems: [
-        ...cart.lineItems
-          .filter((item) => item.productVariant?.documentId !== variantId)
-          .map((item) => ({
+        ...(cart.lineItems
+          ?.filter((item) => item.productVariant?.documentId !== variantId)
+          ?.map((item) => ({
             productVariant: item.productVariant.documentId,
             quantity: item.quantity,
-          })),
-        quantity > 0 && {
+          })) ?? []),
+        Boolean(quantity) && {
           productVariant: variantId,
           quantity,
         },
@@ -47,6 +43,8 @@ export async function updateCart({
       ...(shippingMethod !== undefined && { shippingMethod }),
     },
   });
+
+  console.log(body);
 
   try {
     const result = await strapiQuery<ApiCart>({
