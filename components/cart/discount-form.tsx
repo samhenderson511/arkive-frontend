@@ -20,7 +20,7 @@ const discountFormSchema = z.object({
 });
 
 export function DiscountForm() {
-  const { cart, setCart, salePriceSubtotal } = useCart();
+  const { cart, setCart, salePriceTotal } = useCart();
   const discountCode = cart?.discountCode;
 
   useEffect(() => {
@@ -80,13 +80,13 @@ export function DiscountForm() {
     } else if (validTo && validTo < new Date()) {
       handleDiscountError("Discount code expired", "Please try another code.");
       return;
-    } else if (discount.minimumTotal && discount.minimumTotal > salePriceSubtotal) {
+    } else if (discount.minimumTotal && discount.minimumTotal > salePriceTotal) {
       handleDiscountError(
         "Minimum order value not met",
         "Please add more items to your cart to use this code."
       );
       return;
-    } else if (discount.maximumTotal && discount.maximumTotal < salePriceSubtotal) {
+    } else if (discount.maximumTotal && discount.maximumTotal < salePriceTotal) {
       handleDiscountError(
         "Maximum order value exceeded",
         "Please remove some items from your cart to use this code."
@@ -146,21 +146,30 @@ export function DiscountForm() {
           )}
         />
 
-        {discountCode && (
+        {discountCode ?
           <Button
-            variant="outline"
+            variant="destructive"
             onClick={async () => {
-              discountForm.reset();
-              await updateCart({ discountCode: null });
+              await updateCart({ discountCode: null })
+                .then((res) => {
+                  setCart(res);
+                  discountForm.reset();
+                })
+                .catch((error) => {
+                  toast({
+                    title: "Error updating cart",
+                    description: error.message,
+                    variant: "destructive",
+                  });
+                });
             }}
           >
             Remove Discount
           </Button>
-        )}
-
-        <Button type="submit" variant="outline">
-          Apply Discount
-        </Button>
+        : <Button type="submit" variant="outline">
+            Apply Discount
+          </Button>
+        }
       </form>
     </Form>
   );

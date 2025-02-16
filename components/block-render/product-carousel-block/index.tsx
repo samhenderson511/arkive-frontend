@@ -21,16 +21,34 @@ export async function ProductCarouselBlock({
     path: "products",
     options: {
       populate: {
+        fields: ["name"],
         images: {
-          populate: { colours: { populate: "colourGroup" }, thumbnail: true },
+          populate: {
+            colours: { fields: ["name"], populate: { colourGroup: { fields: ["name"] } } },
+            thumbnail: true,
+          },
         },
         applicableSales: { fields: ["name", "discountPercentage"] },
         brand: { fields: ["name"] },
         season: { fields: ["name"] },
-        categories: { populate: { children: true, parent: true } },
+        categories: {
+          populate: {
+            children: {
+              fields: ["name"],
+            },
+            parent: {
+              fields: ["name"],
+            },
+          },
+        },
         variants: {
           fields: ["price", "size", "stock"],
-          populate: { colour: { populate: "colourGroup" } },
+          populate: {
+            colour: {
+              fields: ["name"],
+              populate: { colourGroup: { fields: ["name"] } },
+            },
+          },
         },
       },
       filters: {
@@ -50,7 +68,7 @@ export async function ProductCarouselBlock({
           },
         },
       },
-      ...(limit && { pagination: { page: 1, pageSize: limit } }),
+      pagination: { page: 1, pageSize: limit ?? 18 },
     },
   });
 

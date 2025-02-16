@@ -24,13 +24,13 @@ export interface Cart {
    */
   tax: number;
   /**
-   * The subtotal of the cart excluding sales and discounts
+   * The subtotal of the cart excluding tax, sales and discounts
    */
   subtotal: number;
   /**
    * The subtotal of the cart excluding discounts
    */
-  salePriceSubtotal: number;
+  salePriceTotal: number;
   /**
    * The shipping of the cart
    */
@@ -45,6 +45,18 @@ export interface Cart {
   total: number;
 }
 
+/**
+ * Custom hook for managing cart state and calculations
+ * @returns {Cart} An object containing cart state and calculated values
+ * @property {ApiCart | null} cart - The current cart object
+ * @property {Function} setCart - Function to update the cart
+ * @property {number} tax - Total tax amount for the cart
+ * @property {number} subtotal - Subtotal excluding tax, sales, and discounts
+ * @property {number} salePriceTotal - Subtotal excluding discounts
+ * @property {number} shipping - Shipping cost
+ * @property {number} discounts - Total discounts applied
+ * @property {number} total - Final total amount
+ */
 export function useCart(): Cart {
   const { cart, setCart } = useCartState();
 
@@ -60,6 +72,9 @@ export function useCart(): Cart {
     fetchCart();
   }, [cart]);
 
+  /**
+   * Calculates total tax based on line items and their tax rates
+   */
   const tax =
     cart?.lineItems?.reduce(
       (acc, { productVariant, quantity }) =>
@@ -67,24 +82,59 @@ export function useCart(): Cart {
       0
     ) ?? 0;
 
+  /**
+   * Calculates subtotal excluding tax, sales, and discounts
+   */
   const subtotal =
     (cart?.lineItems?.reduce(
       (acc, { productVariant, quantity }) => acc + getVariantPrice(productVariant).price * quantity,
       0
     ) ?? 0) - tax;
 
-  const salePriceSubtotal =
-    (cart?.lineItems?.reduce(
+  /**
+   * Calculates subtotal excluding discounts
+   */
+  const salePriceTotal =
+    cart?.lineItems?.reduce(
       (acc, { productVariant, quantity }) =>
         acc + getVariantPrice(productVariant).salePrice * quantity,
       0
-    ) ?? 0) - tax;
+    ) ?? 0;
 
+  /**
+   * Gets shipping cost from selected shipping method
+   */
   const shipping = cart?.shippingMethod?.price ?? 0;
 
-  const discounts = subtotal - salePriceSubtotal;
+  /**
+   * Calculates total discounts from various discount types
+   */
+  const discounts = {
+    fromPercentageOff: (salePriceTotal * (cart?.discountCode?.percentageOff ?? 0)) / 100,
+    fromAmountOffTotal: cart?.discountCode?.amountOffTotal ?? 0,
+    fromAmountOffPerItem:
+      cart?.lineItems?.reduce(
+        (acc, { productVariant, quantity }) =>
+          acc +
+          Math.min(
+            getVariantPrice(productVariant).salePrice,
+            cart?.discountCode?.amountOffPerItem ?? 0
+          ) *
+            quantity,
+        0
+      ) ?? 0,
+  };
 
-  const total = subtotal - discounts + tax;
+  /**
+   * Sums all discount types to get total discounts
+   */
+  const allDiscounts =
+    discounts.fromPercentageOff + discounts.fromAmountOffTotal + discounts.fromAmountOffPerItem;
 
-  return { cart, setCart, tax, subtotal, salePriceSubtotal, shipping, discounts, total };
+  /**
+   * Calculates final total by subtracting discounts from sale price total
+   */
+  const total = salePriceTotal - allDiscounts;
+
+  return { cart, setCart, tax, subtotal, salePriceTotal, shipping, discounts: allDiscounts, total };
 }
