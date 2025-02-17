@@ -19,7 +19,7 @@ export function ProductCarouselBlockClient({
       hideButtons
       className="px-0 w-full max-w-screen-2xl"
       classNames={{
-        carouselItem: "basis-1/2 lg:basis-1/3 xl:basis-1/4",
+        carouselItem: "basis-1/2 sm:basis-1/3 lg:basis-1/4 xl:basis-1/5",
       }}
       items={products
         .reduce((acc, product, index) => {

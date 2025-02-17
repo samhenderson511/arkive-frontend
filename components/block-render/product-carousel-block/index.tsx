@@ -43,6 +43,11 @@ export async function ProductCarouselBlock({
         },
         variants: {
           fields: ["price", "size", "stock"],
+          filters: {
+            stock: {
+              $gt: 0,
+            },
+          },
           populate: {
             colour: {
               fields: ["name"],
