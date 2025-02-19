@@ -88,7 +88,7 @@ export function CartSheet() {
                 href={"/checkout"}
                 onClick={() => setOpenCart(false)}
               >
-                Checkout Securely
+                Proceed to Checkout
               </Button>
               <Button
                 variant={"outline"}

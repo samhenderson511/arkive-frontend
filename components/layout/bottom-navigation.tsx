@@ -21,7 +21,7 @@ export function BottomNavigation({ links, scrollThreshold, logo }: Props) {
   const [width, ref] = useElementWidth<HTMLAnchorElement>();
   const [value, onValueChange] = useState("");
 
-  const { setOpenSearch, setOpenCart, setOpenMenu } = useGlobal();
+  const { setOpenSearch, setOpenCart } = useGlobal();
 
   const ScrolledClassName =
     isScrolled ? "bg-background/95 backdrop-blur-xl" : "bg-background backdrop-blur-0";

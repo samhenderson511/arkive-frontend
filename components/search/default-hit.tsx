@@ -86,7 +86,7 @@ export function DefaultHit({
       </TooltipProvider>
 
       <div className="flex flex-col gap-1">
-        <Text element="span" className="text-xs leading-none text-muted-foreground">
+        <Text element="span" className="text-xs leading-none font-medium">
           {hit.brand}
         </Text>
 

@@ -2,13 +2,13 @@
 
 import { useCart } from "@/lib/hooks";
 import Image from "next/image";
+import { CartItem } from "../cart/cart-item";
+import { CartTotals } from "../cart/cart-totals";
+import { DiscountForm } from "../cart/discount-form";
 import { Button } from "../ui/button";
 import { Text } from "../ui/text";
-import { CartItem } from "./cart-item";
-import { CartTotals } from "./cart-totals";
-import { DiscountForm } from "./discount-form";
 
-export function CartPage() {
+export function CheckoutPage() {
   const { cart } = useCart();
 
   return (

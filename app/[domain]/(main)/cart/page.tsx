@@ -29,7 +29,7 @@ export default async function Cart(props: { params: Promise<{ domain: string }> 
           title="You may also like"
           categories={
             cart?.lineItems
-              .flatMap((item) => item.productVariant.product.categories)
+              ?.flatMap((item) => item.productVariant.product.categories)
               .map((cat) => cat) ?? []
           }
           limit={15}

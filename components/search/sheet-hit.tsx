@@ -36,7 +36,7 @@ export function SheetHit({ hit }: { hit: ProductSearchResult }) {
         <Image {...image} fill className="object-cover" sizes="64px" />
       </div>
       <div className="flex flex-col">
-        <Text element="span" className="text-xs leading-none text-muted-foreground">
+        <Text element="span" className="text-xs leading-none font-medium">
           {hit.brand}
         </Text>
 
